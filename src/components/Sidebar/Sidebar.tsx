@@ -8,6 +8,8 @@ import PerfectScrollbar from "perfect-scrollbar";
 import {ExtractRouteParams, RouteComponentProps} from "react-router";
 import {IRoute} from "../../Interfaces/IRoutes";
 
+import logo from '../../assets/img/logo-ecofeuem.png'
+
 var ps : any;
 
 interface ISideBarProps {
@@ -43,9 +45,7 @@ function Sidebar({props, routes} : ISideBarProps) {
 					target="_blank" rel="noreferrer"
 				>
 
-                    <img src="./logo-ecofeuem.png"/>
-
-                     <p color={'green'}>WFMS - FEUEM</p>
+                        <img src={logo} color={'white'}/>
 				</a>
 			</div>
 			<div className="sidebar-wrapper" ref={sidebar}>

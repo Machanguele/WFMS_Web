@@ -43,14 +43,14 @@ const routes = [
 		layout: "/admin",
 		invisible: false,
 	},
-	/*{
+	{
 		path: "/icons",
 		name: "Icons",
 		icon: "nc-icon nc-diamond",
 		component: Icons,
 		layout: "/admin",
 		invisible: true,
-	},*/
+	},
 
 
 	{
@@ -62,14 +62,14 @@ const routes = [
 		invisible: false,
 	},
 
-/*{
-		path: "/tables",
-		name: "Departamentos",
+{
+		path: "/Configurações",
+		name: "Configurações",
 		icon: "nc-icon nc-tile-56",
-		component: TableList,
+		component: Typography,
 		layout: "/admin",
 		invisible: false,
-	},*/
+	},
 
 	{
 		path: "/notifications",
