@@ -8,6 +8,7 @@ import TableList from "../src/views/Tables";
 import UserPage from "../src/views/User";
 import {Kanban} from "./views/Kanban";
 import Departament from "./views/Departament";
+import Component from "./views/Components";
 
 const routes = [
 	{
@@ -34,10 +35,18 @@ const routes = [
 		layout: "/admin",
 		invisible: false,
 	},
+	{
+		path: "/componentes",
+		name: "Componentes",
+		icon: "nc-icon nc-bank",
+		component: Component,
+		layout: "/admin",
+		invisible: false,
+	},
 
 	{
-		path: "/tarefas",
-		name: "Tarefas",
+		path: "/actividades",
+		name: "Actividades",
 		icon: "nc-icon nc-tile-56",
 		component: Kanban,
 		layout: "/admin",
@@ -88,13 +97,13 @@ const routes = [
 		invisible: false,
 	},
 
-	/*{
+	{
 		path: "/typography",
 		name: "Typography",
 		icon: "nc-icon nc-caps-small",
 		component: Typography,
 		layout: "/admin",
 		invisible: true,
-	},*/
+	}
 ];
 export default routes;

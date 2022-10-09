@@ -153,11 +153,15 @@
 	.logo {
 		position: relative;
 		padding: 7px $padding-base-horizontal;
-		z-index: 4;
+		z-index: 6;
 
 		a.logo-mini,
 		a.logo-normal {
 			@extend .animation-transition-general;
+		}
+		.logoName{
+			margin-left: 1%;
+			margin-top: 7%;
 		}
 
 		a.logo-mini {

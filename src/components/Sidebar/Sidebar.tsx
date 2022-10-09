@@ -7,8 +7,8 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 import {ExtractRouteParams, RouteComponentProps} from "react-router";
 import {IRoute} from "../../Interfaces/IRoutes";
-
-import logo from '../../assets/img/logo-ecofeuem.png'
+import SchemaIcon from '@mui/icons-material/Schema';
+import logo from '../../assets/img/logo.png'
 
 var ps : any;
 
@@ -44,8 +44,8 @@ function Sidebar({props, routes} : ISideBarProps) {
 					className="simple-text logo-normal"
 					target="_blank" rel="noreferrer"
 				>
-
-                        <img src={logo} color={'white'}/>
+                        <SchemaIcon htmlColor={'#FFCB21'} fontSize={'large'}/>
+                        <img src={logo} color={'white'} width={'50%'} className={"logoName"}/>
 				</a>
 			</div>
 			<div className="sidebar-wrapper" ref={sidebar}>

@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: 'https://localhost:5001/api'
+    baseURL: 'https://localhost:5001/api/'
 })
 
 export class Api {
 
-    public get<T>(url: string){
-        return api.get<T>(url);
+    public get<T>(url: string, data: any){
+        return api.get<T>(url, data);
     }
 
     public post<T>(url: string, data: any){

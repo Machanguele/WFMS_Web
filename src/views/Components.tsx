@@ -1,7 +1,7 @@
 /*!
 
 =========================================================
-* Paper Dashboard React - v1.3.0
+* Paper Component React - v1.3.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useEffect, useState} from "react";
 // reactstrap components
 import {
   Card,
@@ -25,52 +25,157 @@ import {
   CardFooter,
   CardTitle,
   Row,
-  Col,
+  Col, Button,
 } from "reactstrap";
+import {useTypeSelector} from "../hooks/useTypeSelector";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router";
+import {componentAction} from "../store/actionCreators/component.actionCreator";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 // core components
 
-function Dashboard() {
+
+const cardStyles = {
+  detailsButton: {
+    borderRadius: 5,
+    marginLeft: '55%',
+  },
+  detailTitle:{
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#7F807F',
+    marginRight: '3%',
+    display: 'flex',
+    justifyContent: 'flexStart'
+  },
+  detailValue:{
+     fontSize: 13,
+     color: '#6C716C',
+      display: 'flex',
+      justifyContent: 'flexStart'
+
+  },
+  cardStyle:{
+      alignItems: 'left',
+      marginLeft: 0,
+      paddingLeft: 0,
+      display: 'flex',
+      alignContent: 'left',
+      justifyContent: 'flexStart',
+  },
+  cardDetails:{
+      display: 'flex',
+      justifyContent: 'flexStart'
+  }
+}
+
+function Component() {
+
+  const [email, setEmail] = useState("");
+  const { components, isLoading, errorMessage } = useTypeSelector(
+      (state) => state.component
+  );
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const componentHandler = () => {
+    dispatch(componentAction());
+  };
+
+  useEffect(()=>{
+    componentHandler()
+  }, [])
+
+  const onClickDetails = ()=>{
+      history.push("/admin/actividades")
+  }
+
+
+  console.log("Componentes: ", components)
+
+  
   return (
     <>
       <div className="content">
         <Row>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="ti-bar-chart text-warning" />
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Administractivas</p>
-                      <CardTitle tag="p">50/71</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
+          <Button color="success" link>
+            Adicionar componente
+            <i className="far fa-clock" />
+          </Button>
+        </Row>
+
+        <Row>
+          {components.map((item, id)=>{
+            return <Col lg="3" md="6" sm="6" key={id}>
+              <Card className="card-stats" style={cardStyles.cardStyle}>
+                <CardBody>
+                  <Row>
+                    <Col md="11" xs="7">
+                      <div className="numbers">
+                        <p className="card-category">
+                            <span style={cardStyles.detailTitle}>Componente:</span>
+                            <span style={cardStyles.detailValue}>{item.title}</span>
+                        </p>
+                          <p className="card-category">
+                              <span style={cardStyles.detailTitle}>Criado em:</span>
+                              <span style={cardStyles.detailValue}>{item.createdAt}</span>
+                          </p>
+                          <p className="card-category">
+                              <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
+                              <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
+                          </p>
+                        <p className="card-category">
+                            <span style={cardStyles.detailTitle}>Iniciada em:</span>
+                            <span style={cardStyles.detailValue}>{item.startedDate? item.startedDate : "Não iniciado"}</span>
+                        </p>
+                          <p className="card-category">
+                              <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
+                              <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
+                          </p>
+                          <p className="card-category">
+                              <span style={cardStyles.detailTitle}>Concluido em:</span>
+                              <span style={cardStyles.detailValue}>{item.actualEndDate? item.actualEndDate: "Não concluído"}</span>
+                          </p>
+                          <p className="card-category">
+                              <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
+                              <span style={cardStyles.cardStyle}>{item.activities?.length+" / "+item.finishedActivities}</span>
+                          </p>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+                <CardFooter>
+                  <hr />
+                  <div className="stats">
+                          <div style={cardStyles.detailsButton}>
+                            <a href='##' onClick={onClickDetails}>
+                              ver Actividades
 {/*
+                              <RemoveRedEyeOutlinedIcon className={"warning-color"} />
+*/}
+                            </a>
+                          </div>
+
+
+                    {/*
                   <i className="fas fa-sync-alt" /> Update Now
 */}
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col lg="3" md="6" sm="6">
+                  </div>
+                </CardFooter>
+              </Card>
+            </Col>
+          })}
+
+          {/*<Col lg="3" md="6" sm="6">
             <Card className="card-stats">
               <CardBody>
                 <Row>
                   <Col md="4" xs="5">
                     <div className="icon-big text-center icon-warning">
-{/*
+
                       <i className="nc-icon nc-money-coins text-success" />
-*/}
+
                     </div>
                   </Col>
                   <Col md="8" xs="7">
@@ -85,9 +190,9 @@ function Dashboard() {
               <CardFooter>
                 <hr />
                 <div className="stats">
-{/*
+
                   <i className="far fa-calendar" /> Last day
-*/}
+
                 </div>
               </CardFooter>
             </Card>
@@ -151,9 +256,9 @@ function Dashboard() {
                 </div>
               </CardFooter>
             </Card>
-          </Col>
+          </Col>*/}
         </Row>
-
+{/*
         <Row>
           <Col md="12">
             <Card>
@@ -170,7 +275,8 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-
+*/}
+{/*
         <Row>
           <Col md="4">
             <Card>
@@ -211,10 +317,14 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-
+*/}
       </div>
     </>
   );
 }
 
-export default Dashboard;
+export default Component;
+function ComponentAction(email: string, password: any): any {
+    throw new Error("Function not implemented.");
+}
+
