@@ -3,15 +3,22 @@ import {IActivityStatus} from "./activityStatus";
 import {IActivityType} from "./activityType";
 import {IComponent} from "./component";
 
-export interface IActivity {
+export interface IActivityHelper{
     id: number,
     description: string,
-    createdAt: Date,
-    starAt: Date,
-    endAt: Date,
-    createdBy: IUser,
-    allocatedTo: IUser,
+    name: string,
+    createdAt: string,
+    starAt: string,
+    endAt: string,
+    createdBy: string,
+    allocatedTo: string,
     activityStatus: IActivityStatus,
-    activityType: IActivityType,
-    component: IComponent
+    status: IActivityStatus,
+}
+
+export interface IActivity {
+    id: number,
+    totalActivities: number
+    status: IActivityStatus,
+    activities: IActivityHelper[]
 }

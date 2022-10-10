@@ -1,16 +1,45 @@
-import React from "react";
+import ReactDOM from "react-dom";
+import React, {useEffect, useState} from "react";
 import Board from 'react-trello'
+import {useTypeSelector} from "../hooks/useTypeSelector";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router";
+import {activityAction} from "../store/actionCreators/activity.actionCreator";
+import {IActivityHelper} from "../models/activity";
+import {Button} from "reactstrap";
+import {Tabs, Tab} from 'react-bootstrap-tabs';
+import {GanttComponentAct} from "../components/Gantt";
 
 
 export  function Kanban() {
 
+    const [dados, setDados] = useState<Ilanes>();
+    const {activities,isLoading, errorMessage} = useTypeSelector(
+        (state) => state.activity
+    );
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const activitiesHandler = () => {
+        dispatch(activityAction(22));
+    };
+    useEffect(()=>{
+        activitiesHandler()
+    }, [])
+
+    useEffect(()=>{
+        if(activities != null){
+            setDados(correctData)
+            console.log("Dados Kanban", correctData());
+        }
+    }, [activities])
 
 
     const CustomCard = props => {
         return (
             <div>
-                <header
+                {/*<header
                     style={{borderBottom: '1px solid #eee', paddingBottom: 6, marginBottom: 8,
                         display: 'flex', flexDirection: 'row', justifyContent: 'space-between',
                         color: props.cardColor
@@ -18,16 +47,75 @@ export  function Kanban() {
                 >
                     <div style={{ fontSize: 14, fontWeight: 'bold' }}>{props.name}</div>
                     <div style={{ fontSize: 11 }}>{props.dueOn}</div>
-                </header>
+                </header>*/}
                 <div style={{ fontSize: 12, color: '#BD3B36' }}>
                     <div style={{ color: '#4C4C4C', fontWeight: 'bold' }}>{props.subTitle}</div>
                     <div style={{ padding: '5px 0px' }}><i>{props.body}</i></div>
                     <div style={{ marginTop: 8, textAlign: 'center', color: props.cardColor, fontSize: 15, fontWeight: 'bold' }}>
                         {props.escalationText}
                     </div>
+                    <p>Teste</p>
+                    <Button className="primary">Assign</Button>
+                </div>
+                <div>
+                    <Button color="success" link>
+                        Alocar utilizador
+                    </Button>
                 </div>
             </div>
         )
+    }
+
+    interface IKanbanCardAdapter{
+        id: string,
+        title: string,
+        label: string,
+        description: string,
+        draggable: boolean
+
+    }
+    interface IKanbanAdapter{
+        id: string,
+        title: string,
+        label: string,
+        cards: IKanbanCardAdapter[]
+    }
+
+    interface Ilanes{
+        lanes: IKanbanAdapter[]
+    }
+
+    const correctData =()=>{
+        let adapter: IKanbanAdapter[];
+        let lanes : Ilanes;
+        adapter =[];
+        activities.map((item=>{
+             adapter.push({
+                 id: `${item?.status?.id}`,
+                 label: `${item?.activities?.length}/${item.totalActivities}`,
+                 title: item.status?.name,
+                 cards: returnData(item?.activities)
+             })
+        }))
+        lanes = {
+            lanes: adapter
+        };
+        return lanes;
+    }
+
+    const returnData =(data: IActivityHelper[])=>{
+        let  aux: IKanbanCardAdapter[];
+        aux = [];
+        data.map((item)=>{
+            return aux.push({
+                id: ""+item?.id,
+                label: "To put something",
+                title: item?.name,
+                draggable: true,
+                description: item?.description
+            });
+        })
+        return aux;
     }
 
     const data = {
@@ -123,16 +211,43 @@ export  function Kanban() {
         ]
     }
 
+    const components = {
+        AddCardLink:      () => <button>New Card</button>,
+        /*LaneHeader:       CustomLaneHeader,
+        NewCardForm:      NewCard,
+        NewLaneSection:   NewLane,*/
+        Card:             CustomCard
+    };
+
     return (
-        <div className="content content-center">
-            <Board
-                customLayout={ true}
-                data={data}
-                draggable ={true}
-                editable ={true}
-                style={{ background: 'transparent', color: 'green' }}
-            />
-            <CustomCard />
+            <div className="content content-center">
+                <Tabs onSelect={(index, label) => console.log(label + ' selected')} fill>
+                    <Tab label="Board de actividades" >
+                        <Board
+                            customCardLayout={true}
+                            data={dados != null ? dados: data}
+                            draggable={true}
+                            editable={false}
+                            style={{ background: 'transparent', color: 'green' }}
+                        >
+                            <CustomCard props={data}/>
+                        </Board>
+                    </Tab>
+                    <Tab label="Lista de actividades">Lista de actividades</Tab>
+                    <Tab label="Diagrama de Gantt">
+                        <GanttComponentAct />
+                    </Tab>
+                </Tabs>
+
+               {/* <Board
+                    addCardLink     ={<button>New Card</button>}
+                    customLaneHeader={<p>Ola</p>}
+                    newCardTemplate ={<p>Estamos aqui</p>}
+                    newLaneTemplate ={<p>New Lane</p>}
+                    customCardLayout
+                >
+                    <CustomCard />
+                </Board>*/}
         </div>
 
     );

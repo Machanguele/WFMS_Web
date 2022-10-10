@@ -31,6 +31,7 @@ import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {componentAction} from "../store/actionCreators/component.actionCreator";
+
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 // core components
 
@@ -90,11 +91,6 @@ function Component() {
   const onClickDetails = ()=>{
       history.push("/admin/actividades")
   }
-
-
-  console.log("Componentes: ", components)
-
-  
   return (
     <>
       <div className="content">

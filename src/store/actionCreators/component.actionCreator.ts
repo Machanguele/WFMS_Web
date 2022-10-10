@@ -14,10 +14,6 @@ export const componentAction = () =>
 
         await api.get<IComponent[]>("Components", {})
             .then(response => {
-
-                console.log("dados de retorno")
-                console.log(response.data)
-
                 if (response.status === 200) {
                     dispatch({
                         type: ComponentActionTypes.COMPONENT_LOADING_SUCCESS,
