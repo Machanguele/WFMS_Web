@@ -41,7 +41,7 @@ function Dashboard({props} : IDashboardProps) {
   }, [location]);
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" >
       <Sidebar
         props={props}
         routes={routes}

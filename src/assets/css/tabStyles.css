@@ -1,0 +1,19 @@
+.tab-header-bold {
+}
+.nav-tabs a.tab-header-blue.active {
+    color: #FFFFFF;
+    background-color: #167415;
+}
+
+.nav-link {
+    color: red;
+}
+.coloredTab {
+    color: red;
+}
+
+.content{
+    /*
+    background-color: #F0F3F4;
+    */
+}

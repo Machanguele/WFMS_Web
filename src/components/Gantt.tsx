@@ -1,10 +1,6 @@
 // @flow
-import moment from "moment";
 import React, {useEffect, useState} from "react";
-import ReactGantt, { GanttRow } from 'react-gantt';
-import Gantt from 'react-gantt-antd'
 import 'react-gantt-antd/lib/css/style.css'
-import TimeLine from  '@parapet3/j-react-gantt-timeline'
 import { GanttOriginal, Task, ViewMode } from "react-gantt-chart";
 
 export  function GanttComponentAct(){

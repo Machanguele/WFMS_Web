@@ -9,6 +9,7 @@ import {IActivityHelper} from "../models/activity";
 import {Button} from "reactstrap";
 import {Tabs, Tab} from 'react-bootstrap-tabs';
 import {GanttComponentAct} from "../components/Gantt";
+import ActivitiesTable from "../components/ActivitiesTable";
 
 
 export  function Kanban() {
@@ -222,6 +223,10 @@ export  function Kanban() {
     return (
             <div className="content content-center">
                 <Tabs onSelect={(index, label) => console.log(label + ' selected')} fill>
+                    <Tab label="Lista de actividades">
+                        <ActivitiesTable />
+                    </Tab>
+
                     <Tab label="Board de actividades" >
                         <Board
                             customCardLayout={true}
@@ -233,7 +238,6 @@ export  function Kanban() {
                             <CustomCard props={data}/>
                         </Board>
                     </Tab>
-                    <Tab label="Lista de actividades">Lista de actividades</Tab>
                     <Tab label="Diagrama de Gantt">
                         <GanttComponentAct />
                     </Tab>
