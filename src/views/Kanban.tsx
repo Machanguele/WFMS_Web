@@ -7,9 +7,13 @@ import {useHistory} from "react-router";
 import {activityAction} from "../store/actionCreators/activity.actionCreator";
 import {IActivityHelper} from "../models/activity";
 import {Button} from "reactstrap";
-import {Tabs, Tab} from 'react-bootstrap-tabs';
 import {GanttComponentAct} from "../components/Gantt";
 import ActivitiesTable from "../components/ActivitiesTable";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import TabContext from '@mui/lab/TabContext';
+import TabPanel from '@mui/lab/TabPanel';
 
 
 export  function Kanban() {
@@ -36,6 +40,11 @@ export  function Kanban() {
         }
     }, [activities])
 
+    const [value, setValue] = React.useState('one');
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
 
     const CustomCard = props => {
         return (
@@ -222,26 +231,49 @@ export  function Kanban() {
 
     return (
             <div className="content content-center">
-                <Tabs onSelect={(index, label) => console.log(label + ' selected')} fill>
-                    <Tab label="Lista de actividades">
-                        <ActivitiesTable />
-                    </Tab>
-
-                    <Tab label="Board de actividades" >
-                        <Board
-                            customCardLayout={true}
-                            data={dados != null ? dados: data}
-                            draggable={true}
-                            editable={false}
-                            style={{ background: 'transparent', color: 'green' }}
+                <Box>
+                <TabContext value={value}>
+                    <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
+                        <Tabs
+                            TabIndicatorProps={{
+                                style: {
+                                    backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
+                                    borderWidth: 4,
+                                }
+                            }}
+                            value={value}
+                            onChange={handleChange}
+                            textColor="primary"
+                            indicatorColor="primary"
+                            aria-label="secondary tabs example"
+                            centered={true}
                         >
-                            <CustomCard props={data}/>
-                        </Board>
-                    </Tab>
-                    <Tab label="Diagrama de Gantt">
-                        <GanttComponentAct />
-                    </Tab>
-                </Tabs>
+                            <Tab
+                                value="one"
+                                label="LISTA DE ACTIVIDADES"
+                                style={{color: '#167415',  textTransform: 'none'}}
+
+                            />
+
+                            <Tab value="two" label="BOARD DE ACTIVIDADES" style={{color: '#167415', textTransform: 'none'}} />
+                            <Tab value="three" label="DIAGRAMA DE GANTT" style={{color: '#167415', textTransform: 'none'}}/>
+                        </Tabs>
+                    </Box>
+
+                    <TabPanel value="one"><ActivitiesTable/></TabPanel>
+                    <TabPanel value="two">
+                        <Board
+                        customCardLayout={true}
+                        data={dados != null ? dados: data}
+                        draggable={true}
+                        editable={false}
+                        style={{ background: 'transparent', color: 'green' }}
+                    >
+                        <CustomCard props={data}/>
+                    </Board></TabPanel>
+                    <TabPanel value="three"><GanttComponentAct/></TabPanel>
+                </TabContext>
+                </Box>
 
                {/* <Board
                     addCardLink     ={<button>New Card</button>}

@@ -14,6 +14,8 @@ export interface IActivityHelper{
     allocatedTo: string,
     activityStatus: IActivityStatus,
     status: IActivityStatus,
+    expectedEndDate: string,
+    expectedStarDate: string
 }
 
 export interface IActivity {
