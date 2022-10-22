@@ -28,13 +28,107 @@ import {
   Col,
 } from "reactstrap";
 import Box from "@mui/material/Box";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar, Line } from 'react-chartjs-2';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import TabPanel from "@mui/lab/TabPanel";
+import ActivitiesTable from "../components/ActivitiesTable";
+import {GanttComponentAct} from "../components/Gantt";
+import TabContext from "@mui/lab/TabContext";
 // core components
 
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
 function Dashboard() {
+
+
+    const [value, setValue] = React.useState('one');
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
+
+   const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Resumo de actividades do 1o. Trimestre',
+      },
+    },
+  };
+
+  const labels = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+  const data1 =[100, 78, 200, 69, 44, 230]
+  const data2 =[90, 78, 197, 65, 44, 220]
+
+    const dataPlaned = {
+        labels,
+        datasets: [
+            {
+                fill: true,
+                label: 'Fluxo de Planeamento',
+                data: data1,
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+        ],
+    };
+
+    const dataExecution = {
+        labels,
+        datasets: [
+            {
+                fill: true,
+                label: 'Fluxo de Execução',
+                data: data2,
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+        ],
+    };
+   const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Paneadas',
+        data: data1,
+        backgroundColor: value =="two"? 'rgba(255, 203, 35, 1)': 'rgba(255, 203, 35, 0.5)',
+      },
+      {
+        label: 'Concluidas',
+        data: data2,
+        backgroundColor: value=="two"? 'rgba(22, 116, 21, 1)': 'rgba(22, 116, 21, 0.5)',
+      },
+    ],
+  };
+
+
+
   return (
     <>
       <div className="content">
-        <Row>
+        {/*<Row>
           <Col lg="3" md="6" sm="6">
             <Card className="card-stats">
               <CardBody>
@@ -56,9 +150,9 @@ function Dashboard() {
               <CardFooter>
                 <hr />
                 <div className="stats">
-{/*
+
                   <i className="fas fa-sync-alt" /> Update Now
-*/}
+
                 </div>
               </CardFooter>
             </Card>
@@ -69,9 +163,9 @@ function Dashboard() {
                 <Row>
                   <Col md="4" xs="5">
                     <div className="icon-big text-center icon-warning">
-{/*
+
                       <i className="nc-icon nc-money-coins text-success" />
-*/}
+
                     </div>
                   </Col>
                   <Col md="8" xs="7">
@@ -86,9 +180,9 @@ function Dashboard() {
               <CardFooter>
                 <hr />
                 <div className="stats">
-{/*
+
                   <i className="far fa-calendar" /> Last day
-*/}
+
                 </div>
               </CardFooter>
             </Card>
@@ -153,15 +247,48 @@ function Dashboard() {
               </CardFooter>
             </Card>
           </Col>
-        </Row>
-        <Row>
-          <Box>
+        </Row>*/}
 
-          </Box>
-        </Row>
+          <TabContext value={value}>
+              <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
+                  <Tabs
+                      TabIndicatorProps={{
+                          style: {
+                              backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
+                              borderWidth: 4,
+                          }
+                      }}
+                      value={value}
+                      onChange={handleChange}
+                      textColor="primary"
+                      indicatorColor="primary"
+                      aria-label="secondary tabs example"
+                      centered={true}
+                  >
+                      <Tab value="two" label="Resumo por linhas" style={{color: '#167415', textTransform: 'none'}} />
+                      <Tab
+                          value="one"
+                          label="Resumo por barras"
+                          style={{color: '#167415',  textTransform: 'none'}}
+                      />
+                      <Tab value="three" label="Fluxo de Execução" style={{color: '#167415', textTransform: 'none'}}/>
+                      <Tab value="four" label="Fluxo de Planeamento" style={{color: '#167415', textTransform: 'none'}}/>
+                  </Tabs>
+              </Box>
 
-
-
+              <TabPanel value="one">
+                  <Bar options={options} data={data} />
+              </TabPanel>
+              <TabPanel value="two">
+                  <Line options={options} data={data} />
+              </TabPanel>
+              <TabPanel value="three">
+                  <Bar options={options} data={dataExecution} />
+              </TabPanel>
+              <TabPanel value="four">
+                  <Bar options={options} data={dataPlaned} />
+              </TabPanel>
+          </TabContext>
       </div>
     </>
   );
