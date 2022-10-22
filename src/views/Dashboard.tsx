@@ -27,6 +27,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import Box from "@mui/material/Box";
 // core components
 
 function Dashboard() {
@@ -153,64 +154,13 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-
         <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Users Behavior</CardTitle>
-                <p className="card-category">24 Hours performance</p>
-              </CardHeader>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-                  <i className="fa fa-history" /> Updated 3 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
+          <Box>
+
+          </Box>
         </Row>
 
-        <Row>
-          <Col md="4">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Email Statistics</CardTitle>
-                <p className="card-category">Last Campaign Performance</p>
-              </CardHeader>
-              <CardFooter>
-                <div className="legend">
-                  <i className="fa fa-circle text-primary" /> Opened{" "}
-                  <i className="fa fa-circle text-warning" /> Read{" "}
-                  <i className="fa fa-circle text-danger" /> Deleted{" "}
-                  <i className="fa fa-circle text-gray" /> Unopened
-                </div>
-                <hr />
-                <div className="stats">
-                  <i className="fa fa-calendar" /> Number of emails sent
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col md="8">
-            <Card className="card-chart">
-              <CardHeader>
-                <CardTitle tag="h5">NASDAQ: AAPL</CardTitle>
-                <p className="card-category">Line Chart with Points</p>
-              </CardHeader>
-              <CardFooter>
-                <div className="chart-legend">
-                  <i className="fa fa-circle text-info" /> Tesla Model S{" "}
-                  <i className="fa fa-circle text-warning" /> BMW 5 Series
-                </div>
-                <hr />
-                <div className="card-stats">
-                  <i className="fa fa-check" /> Data information certified
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
+
 
       </div>
     </>

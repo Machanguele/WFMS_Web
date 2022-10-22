@@ -30,9 +30,23 @@ import {
 import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import {componentAction} from "../store/actionCreators/component.actionCreator";
+import {
+    addComponentAction,
+    componentAction,
+    setSelectedComponentAction
+} from "../store/actionCreators/component.actionCreator";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
 
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import Box from "@mui/material/Box";
+import {
+    FormGroup,
+    Label,
+    Input,
+    FormText
+} from "reactstrap";
 // core components
 
 
@@ -73,7 +87,15 @@ const cardStyles = {
 function Component() {
 
   const [email, setEmail] = useState("");
-  const { components, isLoading, errorMessage } = useTypeSelector(
+  const [title, setTitle] = useState("");
+  const [departmentId, setDepartmentId] = useState(3);
+  const [description, setDescription] = useState("");
+  const [expectedStartDate, setExpectedStartDate] = useState("2022-10-10");
+  const [expectedEndDate, setExpectedEndDate] = useState("2022-10-12");
+  const [addComponent, setAddComponent] = useState(false);
+
+
+  const {components, isLoading, errorMessage, componentId } = useTypeSelector(
       (state) => state.component
   );
 
@@ -84,236 +106,160 @@ function Component() {
     dispatch(componentAction());
   };
 
+  const handleCreateComponent = ()=>{
+
+      dispatch(addComponentAction(title, departmentId, description, expectedStartDate, expectedEndDate))
+      setTimeout(()=>{
+          setAddComponent(false)
+          componentHandler()
+      }, 1000)
+  }
+
   useEffect(()=>{
     componentHandler()
   }, [])
 
-  const onClickDetails = ()=>{
-      history.push("/admin/actividades")
+    console.log("SelectedCompont", componentId)
+
+  const onClickDetails = (component: number)=>{
+      dispatch(setSelectedComponentAction(component))
+      history.push(`/admin/actividades/${component}`)
+
   }
   return (
     <>
       <div className="content">
-        <Row>
-          <Button color="success" link>
-            Adicionar componente
-            <i className="far fa-clock" />
-          </Button>
+        <Row >
+          <Box sx={{marginLeft: '1%'}}>
+              <Button
+
+                  color="success" link onClick={()=>setAddComponent(true)}>
+                  Adicionar componente
+                  <AddCircleIcon/>
+              </Button>
+
+              {addComponent &&
+                  <Button
+                      sx={{marginLeft: '2%'}}
+                      color="warning" link onClick={() => setAddComponent(false)}>
+                      Fechar
+                      <CloseIcon/>
+                  </Button>
+              }
+          </Box>
         </Row>
 
-        <Row>
-          {components.map((item, id)=>{
-            return <Col lg="3" md="6" sm="6" key={id}>
-              <Card className="card-stats" style={cardStyles.cardStyle}>
-                <CardBody>
-                  <Row>
-                    <Col md="11" xs="7">
-                      <div className="numbers">
-                        <p className="card-category">
-                            <span style={cardStyles.detailTitle}>Componente:</span>
-                            <span style={cardStyles.detailValue}>{item.title}</span>
-                        </p>
-                          <p className="card-category">
-                              <span style={cardStyles.detailTitle}>Criado em:</span>
-                              <span style={cardStyles.detailValue}>{item.createdAt}</span>
-                          </p>
-                          <p className="card-category">
-                              <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
-                              <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
-                          </p>
-                        <p className="card-category">
-                            <span style={cardStyles.detailTitle}>Iniciada em:</span>
-                            <span style={cardStyles.detailValue}>{item.startedDate? item.startedDate : "Não iniciado"}</span>
-                        </p>
-                          <p className="card-category">
-                              <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
-                              <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
-                          </p>
-                          <p className="card-category">
-                              <span style={cardStyles.detailTitle}>Concluido em:</span>
-                              <span style={cardStyles.detailValue}>{item.actualEndDate? item.actualEndDate: "Não concluído"}</span>
-                          </p>
-                          <p className="card-category">
-                              <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
-                              <span style={cardStyles.cardStyle}>{item.activities?.length+" / "+item.finishedActivities}</span>
-                          </p>
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-                <CardFooter>
-                  <hr />
-                  <div className="stats">
-                          <div style={cardStyles.detailsButton}>
-                            <a href='##' onClick={onClickDetails}>
-                              ver Actividades
-{/*
+          {addComponent &&
+              <Box sx={{backgroundColor: '#FFFFFF', width: '90%', padding: '2%', marginTop: '2%'}}>
+                  <form>
+                      <FormGroup>
+                          <Label for="exampleEmail" color={"#138D75"} >Título</Label>
+                          <Input
+                              type="text"
+                              name="text"
+                              id="exampleEmail"
+                              placeholder="Título do componente"
+                              value={title}
+                              onChange={(value)=>setTitle(value.target.value)}
+                          />
+                          <FormText color="muted">
+                             ex: Plano de inserção de novos ingressos
+                          </FormText>
+                      </FormGroup>
+
+                      <FormGroup>
+                          <Label for="exampleText">Descrição</Label>
+                          <Input type="textarea" name="text" id="exampleText"
+                                 onChange={(value)=>setDescription(value.target.value)}
+                          />
+                      </FormGroup>
+
+                      <FormGroup>
+                          <Label for="exampleText">Espectativa início</Label>
+                          <Input type="date" name="text" id="exampleText" />
+                      </FormGroup>
+
+                      <FormGroup>
+                          <Label for="exampleText">Espectativa de fim</Label>
+                          <Input type="date" name="text" id="exampleText" />
+                      </FormGroup>
+
+                      <Button
+                          sx={{marginTop: '10%'}}
+                          color="success" link onClick={handleCreateComponent}>
+                          Gravar
+                          <SaveIcon/>
+                      </Button>
+                  </form>
+              </Box>
+          }
+
+
+          {!addComponent && <Row>
+              {components.map((item, id) => {
+                  return <Col lg="3" md="6" sm="6" key={id}>
+                      <Card className="card-stats" style={cardStyles.cardStyle}>
+                          <CardBody>
+                              <Row>
+                                  <Col md="11" xs="7">
+                                      <div className="numbers">
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Componente:</span>
+                                              <span style={cardStyles.detailValue}>{item.title}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Criado em:</span>
+                                              <span style={cardStyles.detailValue}>{item.createdAt}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
+                                              <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Iniciada em:</span>
+                                              <span
+                                                  style={cardStyles.detailValue}>{item.startedDate ? item.startedDate : "Não iniciado"}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
+                                              <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Concluido em:</span>
+                                              <span
+                                                  style={cardStyles.detailValue}>{item.actualEndDate ? item.actualEndDate : "Não concluído"}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
+                                              <span
+                                                  style={cardStyles.cardStyle}>{item.activities?.length + " / " + item.finishedActivities}</span>
+                                          </p>
+                                      </div>
+                                  </Col>
+                              </Row>
+                          </CardBody>
+                          <CardFooter>
+                              <hr/>
+                              <div className="stats">
+                                  <div style={cardStyles.detailsButton}>
+                                      <a href='##' onClick={() => onClickDetails(item.id)}>
+                                          ver Actividades
+                                          {/*
                               <RemoveRedEyeOutlinedIcon className={"warning-color"} />
 */}
-                            </a>
-                          </div>
+                                      </a>
+                                  </div>
 
 
-                    {/*
+                                  {/*
                   <i className="fas fa-sync-alt" /> Update Now
 */}
-                  </div>
-                </CardFooter>
-              </Card>
-            </Col>
-          })}
-
-          {/*<Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-
-                      <i className="nc-icon nc-money-coins text-success" />
-
-                    </div>
+                              </div>
+                          </CardFooter>
+                      </Card>
                   </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Plano do Proximo semestre</p>
-                      <CardTitle tag="p">50/50</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="far fa-calendar" /> Last day
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-
-                      <i className="nc-icon nc-vector text-danger" />
-
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Departamento Social</p>
-                      <CardTitle tag="p">10/11</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="far fa-clock" /> In the last hour
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-
-                      <i className="nc-icon nc-favourite-28 text-primary" />
-
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Eventos</p>
-                      <CardTitle tag="p">5/5</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="fas fa-sync-alt" /> Update now
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>*/}
-        </Row>
-{/*
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Users Behavior</CardTitle>
-                <p className="card-category">24 Hours performance</p>
-              </CardHeader>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-                  <i className="fa fa-history" /> Updated 3 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-*/}
-{/*
-        <Row>
-          <Col md="4">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Email Statistics</CardTitle>
-                <p className="card-category">Last Campaign Performance</p>
-              </CardHeader>
-              <CardFooter>
-                <div className="legend">
-                  <i className="fa fa-circle text-primary" /> Opened{" "}
-                  <i className="fa fa-circle text-warning" /> Read{" "}
-                  <i className="fa fa-circle text-danger" /> Deleted{" "}
-                  <i className="fa fa-circle text-gray" /> Unopened
-                </div>
-                <hr />
-                <div className="stats">
-                  <i className="fa fa-calendar" /> Number of emails sent
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col md="8">
-            <Card className="card-chart">
-              <CardHeader>
-                <CardTitle tag="h5">NASDAQ: AAPL</CardTitle>
-                <p className="card-category">Line Chart with Points</p>
-              </CardHeader>
-              <CardFooter>
-                <div className="chart-legend">
-                  <i className="fa fa-circle text-info" /> Tesla Model S{" "}
-                  <i className="fa fa-circle text-warning" /> BMW 5 Series
-                </div>
-                <hr />
-                <div className="card-stats">
-                  <i className="fa fa-check" /> Data information certified
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-*/}
+              })}
+          </Row>}
       </div>
     </>
   );

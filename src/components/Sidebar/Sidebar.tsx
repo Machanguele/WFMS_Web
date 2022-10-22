@@ -51,7 +51,7 @@ function Sidebar({props, routes} : ISideBarProps) {
 			<div className="sidebar-wrapper" ref={sidebar}>
 				<Nav>
 					{routes.map((prop, key) => {
-						if (prop.layout === "/admin") {
+						if (prop.layout === "/admin" && !prop.invisible) {
 							return (
 								<li className={activeRoute(prop.path)} key={key}>
 									<NavLink

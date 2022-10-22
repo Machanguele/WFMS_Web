@@ -38,3 +38,77 @@ export const activityAction = (componentId: number) =>
         })
     }
     }
+
+
+export const activityStatusAction = (activityStatus: string, activityId: number) =>
+    async (dispatch: Dispatch<ActivityAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_STATUS
+            });
+
+            await api.put<IActivity[]>(`activities/status`, {activityStatus, activityId})
+                .then(response => {
+
+                    console.log("dados de Estados")
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ActivityActionTypes.ACTIVITY_STATUS_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ActivityActionTypes.ACTIVITY_STATUS_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_STATUS_FAIL,
+                payload: e
+            })
+        }
+    }
+
+
+export const allocateUserAction = (userEmail: string, activityId: number) =>
+    async (dispatch: Dispatch<ActivityAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_ALLOCATE
+            });
+
+            await api.put<IActivity[]>(`activities/allocate`, {userEmail, activityId})
+                .then(response => {
+
+                    console.log("dados de Estados")
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ActivityActionTypes.ACTIVITY_ALLOCATE_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ActivityActionTypes.ACTIVITY_ALLOCATE_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_ALLOCATE_FAIL,
+                payload: e
+            })
+        }
+    }

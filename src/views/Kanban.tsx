@@ -14,6 +14,8 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import SaveIcon from "@mui/icons-material/Save";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
 export  function Kanban() {
@@ -22,12 +24,17 @@ export  function Kanban() {
     const {activities,isLoading, errorMessage} = useTypeSelector(
         (state) => state.activity
     );
+    const {componentId } = useTypeSelector(
+        (state) => state.component
+    );
+
+    console.log("O Component eh: ", componentId)
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const activitiesHandler = () => {
-        dispatch(activityAction(22));
+        dispatch(activityAction(componentId));
     };
     useEffect(()=>{
         activitiesHandler()
@@ -45,6 +52,7 @@ export  function Kanban() {
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
+
 
     const CustomCard = props => {
         return (
@@ -119,7 +127,7 @@ export  function Kanban() {
         data.map((item)=>{
             return aux.push({
                 id: ""+item?.id,
-                label: "To put something",
+                label: item.status?.name,
                 title: item?.name,
                 draggable: true,
                 description: item?.description
@@ -232,47 +240,57 @@ export  function Kanban() {
     return (
             <div className="content content-center">
                 <Box>
-                <TabContext value={value}>
-                    <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
-                        <Tabs
-                            TabIndicatorProps={{
-                                style: {
-                                    backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
-                                    borderWidth: 4,
-                                }
-                            }}
-                            value={value}
-                            onChange={handleChange}
-                            textColor="primary"
-                            indicatorColor="primary"
-                            aria-label="secondary tabs example"
-                            centered={true}
-                        >
-                            <Tab
-                                value="one"
-                                label="LISTA DE ACTIVIDADES"
-                                style={{color: '#167415',  textTransform: 'none'}}
+                        <TabContext value={value}>
+                            <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
+                                <Tabs
+                                    TabIndicatorProps={{
+                                        style: {
+                                            backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
+                                            borderWidth: 4,
+                                        }
+                                    }}
+                                    value={value}
+                                    onChange={handleChange}
+                                    textColor="primary"
+                                    indicatorColor="primary"
+                                    aria-label="secondary tabs example"
+                                    centered={true}
+                                >
+                                    <Tab value="two" label="BOARD DE ACTIVIDADES" style={{color: '#167415', textTransform: 'none'}} />
+                                    <Tab
+                                        value="one"
+                                        label="GESTÃO DE ACTIVIDADES"
+                                        style={{color: '#167415',  textTransform: 'none'}}
 
-                            />
+                                    />
+                                    <Tab value="three" label="DIAGRAMA DE GANTT" style={{color: '#167415', textTransform: 'none'}}/>
+                                </Tabs>
+                            </Box>
 
-                            <Tab value="two" label="BOARD DE ACTIVIDADES" style={{color: '#167415', textTransform: 'none'}} />
-                            <Tab value="three" label="DIAGRAMA DE GANTT" style={{color: '#167415', textTransform: 'none'}}/>
-                        </Tabs>
+                            <TabPanel value="one"><ActivitiesTable/></TabPanel>
+                            <TabPanel value="two">
+                                <Board
+                                    customCardLayout={true}
+                                    data={dados != null ? dados: data}
+                                    draggable={false}
+                                    editable={false}
+                                    style={{ background: 'transparent', color: 'green' }}
+                                >
+                                    <CustomCard props={data}/>
+                                </Board></TabPanel>
+                            <TabPanel value="three"><GanttComponentAct/></TabPanel>
+                        </TabContext>
+
+                    <Box sx={{marginTop: '10%', marginLeft:'2%' }}>
+                        <Button
+                            sx={{marginRight: '2%'}}
+                            color="success" link onClick={()=>{}}>
+                            Carregar planilha de actividades
+                            <CloudUploadIcon/>
+                        </Button>
                     </Box>
 
-                    <TabPanel value="one"><ActivitiesTable/></TabPanel>
-                    <TabPanel value="two">
-                        <Board
-                        customCardLayout={true}
-                        data={dados != null ? dados: data}
-                        draggable={true}
-                        editable={false}
-                        style={{ background: 'transparent', color: 'green' }}
-                    >
-                        <CustomCard props={data}/>
-                    </Board></TabPanel>
-                    <TabPanel value="three"><GanttComponentAct/></TabPanel>
-                </TabContext>
+
                 </Box>
 
                {/* <Board

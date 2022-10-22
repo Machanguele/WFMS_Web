@@ -34,3 +34,48 @@ export const componentAction = () =>
         })
     }
     }
+
+export const addComponentAction = (title: string, departmentId: number,
+                                   description: string,expectedStartDate: string,
+                                   expectedEndDate: string) =>
+    async (dispatch: Dispatch<ComponentAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ComponentActionTypes.ADD_COMPONENT_LOADING
+            });
+
+            await api.post<IComponent[]>("Components", {title, departmentId,
+                description, expectedStartDate, expectedEndDate })
+                .then(response => {
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ComponentActionTypes.ADD_COMPONENT_LOADING_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ComponentActionTypes.ADD_COMPONENT_LOADING_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ComponentActionTypes.ADD_COMPONENT_LOADING_FAIL,
+                payload: e
+            })
+        }
+    }
+
+export const setSelectedComponentAction = (data: number) =>
+    async (dispatch: Dispatch<ComponentAction>) => {
+            dispatch({
+                            type: ComponentActionTypes.SET_COMPONENT_LOADING_SUCCESS,
+                            payload: data
+                        });
+
+    }
+

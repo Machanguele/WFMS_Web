@@ -20,15 +20,14 @@ import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useEffect} from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import EditIcon from '@mui/icons-material/Edit';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 
 
 import Button from "@material-ui/core/Button";
@@ -36,7 +35,23 @@ import Tooltip from "@material-ui/core/Tooltip";
 import {Row} from "react-bootstrap";
 import TextField from '@mui/material/TextField';
 
-import {IActivity} from "../models/activity";
+
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import BuildIcon from '@mui/icons-material/Build';
+
+import {
+    FormGroup,
+    Label,
+    Input
+} from "reactstrap";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router";
+import {activityAction, activityStatusAction, allocateUserAction} from "../store/actionCreators/activity.actionCreator";
+
+
 
 const tablesStyles = {
     container: {
@@ -98,15 +113,65 @@ export default function ActivitiesTable() {
     const [showModal, setShowModal] = React.useState(false);
     const [selectedActivity, setSelectedActivity] = React.useState<RowTypes>();
     const [isChanged, setIsChanged] = React.useState(false);
+    const [saveStatus, setSaveStatus] = React.useState(false);
+    const [saveAllocated, setSaveAllocated] = React.useState(false);
 
     const {activities,isLoading, errorMessage} = useTypeSelector(
         (state) => state.activity
     );
+    const [status, setStatus] = React.useState('');
+    const [selectedEmail, setSelectedEmail] = React.useState('');
+
+    const handleChangeStatus = (event: SelectChangeEvent) => {
+        setStatus(event.target.value);
+        console.log("Valor selecionado", event.target.value)
+    };
+    const handleChangeUser = (event: SelectChangeEvent) => {
+        setSelectedEmail(event.target.value);
+        console.log("Valor selecionado", event.target.value)
+    };
+
+
+
 
     useEffect(()=>{
         //setDataTodo(rows)
         fillRows();
     }, [activities])
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const updateActivitieHandler = () => {
+        console.log("Selectedactivity", selectedActivity);
+        if(selectedActivity != null && status != ""){
+            setShowModal(false)
+            dispatch(activityStatusAction(status, selectedActivity.id));
+            setTimeout(()=>{
+                setStatus("")
+                setSaveStatus(false)
+                setSaveAllocated(false)
+                dispatch(activityAction(22))
+            }, 1000)
+        }
+    };
+
+    const allocateActivitieHandler = () => {
+        console.log("Selectedactivity", selectedActivity);
+        if(selectedActivity != null && selectedEmail != ""){
+            setShowModal(false)
+            dispatch(allocateUserAction(selectedEmail, selectedActivity.id));
+            setTimeout(()=>{
+                setStatus("")
+                setSaveStatus(false)
+                setSaveAllocated(false)
+                dispatch(activityAction(22))
+            }, 1000)
+        }
+    };
+   /* useEffect(()=>{
+        activitiesHandler()
+    }, [])*/
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -142,25 +207,25 @@ export default function ActivitiesTable() {
         activities.map((item, key)=>{
             if(item.status.name==="Por fazer"){
                 item.activities.map((act, key)=>{
-                    dataTodo.push(createData(key+1, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
+                    dataTodo.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
                         act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
             if(item.status.name==="Em andamento"){
                 item.activities.map((act, key)=>{
-                    dataInProgress.push(createData(key+1, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
+                    dataInProgress.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
                         act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
             if(item.status.name==="Em Revisão"){
                 item.activities.map((act, key)=>{
-                    dataInReview.push(createData(key+1, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
+                    dataInReview.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
                         act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
             if(item.status.name==="Concluido"){
                 item.activities.map((act, key)=>{
-                    dataFinished.push(createData(key+1, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
+                    dataFinished.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
                         act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
@@ -217,7 +282,9 @@ export default function ActivitiesTable() {
                 onClose={()=>setShowModal(false)}
                 aria-labelledby="customized-dialog-title"
                 open={showModal}
-                style={{width: '100%',  margin: 'auto', borderRadius: 10}}
+                style={{width: '100%',  margin: 'auto', borderRadius: 10
+
+            }}
             >
                 <DialogTitle
                     sx={{color: '#148F77', height: '2%', fontSize: '12pt'}}
@@ -225,12 +292,47 @@ export default function ActivitiesTable() {
                     Actividade: {selectedActivity?.activity}
                 </DialogTitle>
                 <DialogContent dividers style={tablesStyles.modalContent}>
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Estado:
-                            <span style={tablesStyles.modalInfo}>{selectedActivity?.status}</span>
-                        </Row>
-                    </Box>
+                        <Box style={tablesStyles.modalTitle}>
+                            <Row>Estado:
+                                <span style={tablesStyles.modalInfo}>{selectedActivity?.status}</span>
+                                <IconButton aria-label="fingerprint" color="success">
+                                    <EditIcon
+                                        fontSize={"small"}
+                                        color={"warning"}
+                                        onClick={()=>setSaveStatus(true)}
+                                    />
+                                </IconButton>
+                            </Row>
+                            {/*<FormControl fullWidth>
+                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                    Age
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={30}
+                                    inputProps={{
+                                        name: 'age',
+                                        id: 'uncontrolled-native',
+                                    }}
+                                >
+                                    <option value={10}>Ten</option>
+                                    <option value={20}>Twenty</option>
+                                    <option value={30}>Thirty</option>
+                                </NativeSelect>
+                            </FormControl>*/}
+                            {saveStatus &&
+
+                                <FormGroup>
+                                    <Label for="exampleSelectMulti1">Estado selecionado: {status}</Label>
+                                    <Input type="select" name="selectMulti" id="exampleSelectMulti1" multiple
+                                           onChange={handleChangeStatus}
+                                    >
+                                        <option value={"Por fazer"}>Por fazer</option>
+                                        <option value={"Em andamento"}>Em andamento</option>
+                                        <option value={"Em Revisão"}>Em Revisão</option>
+                                        <option value={"Concluido"}>Concluido</option>
+                                    </Input>
+                                </FormGroup>}
+                        </Box>
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
                             Descrição: <span style={tablesStyles.modalInfo}>
@@ -284,9 +386,28 @@ export default function ActivitiesTable() {
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
                             Alocado: <span style={tablesStyles.modalInfo}>
-                            Jose Francisco
+                            {selectedActivity?.allocatedTo? selectedActivity.allocatedTo : 'N/A'}
                         </span>
+                            <IconButton aria-label="fingerprint" color="success">
+                                <EditIcon
+                                    fontSize={"small"}
+                                    color={"warning"}
+                                    onClick={()=>setSaveAllocated(true)}
+                                />
+                            </IconButton>
                         </Row>
+
+                        {saveAllocated &&
+
+                            <FormGroup>
+                                <Label for="exampleSelectMulti1">Allocar a/ao: </Label>
+                                <Input type="select" name="selectMulti" id="exampleSelectMulti1" multiple
+                                       onChange={handleChangeUser}
+                                >
+                                    <option value={"josemachanguele@gmail.com"}>Jose Machanguele</option>
+                                    <option value={"admin@feuem.co.mz"}>Admin FEUEM</option>
+                                </Input>
+                            </FormGroup>}
                     </Box>
 
                     <Typography gutterBottom>
@@ -300,8 +421,16 @@ export default function ActivitiesTable() {
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={()=>setShowModal(false)}>
-                        Save changes
+                        Cancelar
                     </Button>
+
+                    {saveStatus && <Button autoFocus onClick={updateActivitieHandler}>
+                        Gravar
+                    </Button>}
+
+                    {saveAllocated && <Button autoFocus onClick={allocateActivitieHandler}>
+                        Gravar
+                    </Button>}
                 </DialogActions>
             </BootstrapDialog>
         )
@@ -344,7 +473,7 @@ export default function ActivitiesTable() {
                                 <StyledTableCell align="left">{row.allocatedTo}</StyledTableCell>
                                 <StyledTableCell align="left">
                                     <IconButton aria-label="fingerprint" color="success">
-                                        <RemoveRedEyeIcon
+                                        <BuildIcon
                                             color={"warning"}
                                             onClick={()=>handleSelectedActivity(row)}
                                         />

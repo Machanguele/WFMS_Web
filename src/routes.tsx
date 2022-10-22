@@ -30,7 +30,7 @@ const routes = [
 	{
 		path: "/dashboard",
 		name: "Dashboard",
-		icon: "nc-icon nc-bank",
+		icon: "nc-icon nc-chart-bar-32",
 		component: Dashboard,
 		layout: "/admin",
 		invisible: false,
@@ -38,7 +38,7 @@ const routes = [
 	{
 		path: "/componentes",
 		name: "Componentes",
-		icon: "nc-icon nc-bank",
+		icon: "nc-icon nc-tile-56",
 		component: Component,
 		layout: "/admin",
 		invisible: false,
@@ -50,14 +50,14 @@ const routes = [
 		icon: "nc-icon nc-tile-56",
 		component: Kanban,
 		layout: "/admin",
-		invisible: false,
+		invisible: true,
 	},
 	{
 		path: "/icons",
 		name: "Icons",
 		icon: "nc-icon nc-diamond",
 		component: Icons,
-		layout: "/admin",
+		layout: "/admin2",
 		invisible: true,
 	},
 
@@ -65,28 +65,28 @@ const routes = [
 	{
 		path: "/tables",
 		name: "Departamentos",
-		icon: "nc-icon nc-tile-56",
+		icon: "nc-icon nc-caps-small",
 		component: Departament,
 		layout: "/admin",
-		invisible: false,
+		invisible: true,
 	},
 
 {
 		path: "/Configurações",
 		name: "Configurações",
-		icon: "nc-icon nc-tile-56",
+		icon: "nc-icon nc-settings",
 		component: Typography,
 		layout: "/admin",
-		invisible: false,
+		invisible: true,
 	},
 
 	{
 		path: "/notifications",
-		name: "Notificacoes",
+		name: "Notificacoes2",
 		icon: "nc-icon nc-bell-55",
 		component: Notifications,
 		layout: "/admin",
-		invisible: false,
+		invisible: true,
 	},
 	{
 		path: "/user-page",
@@ -102,7 +102,7 @@ const routes = [
 		name: "Typography",
 		icon: "nc-icon nc-caps-small",
 		component: Typography,
-		layout: "/admin",
+		layout: "/admin2",
 		invisible: true,
 	}
 ];
