@@ -45,7 +45,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import {
     FormGroup,
     Label,
-    Input
+    Input, DropdownToggle, DropdownMenu, DropdownItem, Dropdown
 } from "reactstrap";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
@@ -307,22 +307,6 @@ export default function ActivitiesTable() {
                                     />
                                 </IconButton>
                             </Row>
-                            {/*<FormControl fullWidth>
-                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                    Age
-                                </InputLabel>
-                                <NativeSelect
-                                    defaultValue={30}
-                                    inputProps={{
-                                        name: 'age',
-                                        id: 'uncontrolled-native',
-                                    }}
-                                >
-                                    <option value={10}>Ten</option>
-                                    <option value={20}>Twenty</option>
-                                    <option value={30}>Thirty</option>
-                                </NativeSelect>
-                            </FormControl>*/}
                             {saveStatus &&
 
                                 <FormGroup>
@@ -336,6 +320,24 @@ export default function ActivitiesTable() {
                                         <option value={"Concluido"}>Concluido</option>
                                     </Input>
                                 </FormGroup>}
+                            {/*<Dropdown
+                                nav
+                                isOpen={saveStatus}
+                                toggle={() => setSaveStatus(!saveStatus)}
+
+                            >
+                                <DropdownToggle caret nav>
+                                    <i className="nc-icon nc-bell-55" />
+                                    <p>
+                                        <span className="d-lg-none d-md-block">Some Actions</span>
+                                    </p>
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    <DropdownItem tag="a">Action</DropdownItem>
+                                    <DropdownItem tag="a">Another Action</DropdownItem>
+                                    <DropdownItem tag="a">Something else here</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>*/}
                         </Box>
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
