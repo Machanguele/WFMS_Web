@@ -4,7 +4,7 @@ import Board from 'react-trello'
 import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import {activityAction} from "../store/actionCreators/activity.actionCreator";
+import {activityAction, activityGanttAction} from "../store/actionCreators/activity.actionCreator";
 import {IActivityHelper} from "../models/activity";
 import {Button} from "reactstrap";
 import {GanttComponentAct} from "../components/Gantt";
@@ -21,14 +21,14 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 export  function Kanban() {
 
     const [dados, setDados] = useState<Ilanes>();
-    const {activities,isLoading, errorMessage} = useTypeSelector(
+    const {activities,isLoading, errorMessage, gantActivities} = useTypeSelector(
         (state) => state.activity
     );
     const {componentId } = useTypeSelector(
         (state) => state.component
     );
 
-    console.log("O Component eh: ", componentId)
+    console.log("O gant: ", gantActivities)
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -36,14 +36,19 @@ export  function Kanban() {
     const activitiesHandler = () => {
         dispatch(activityAction(componentId));
     };
+    const activitiesGanttHandler = () => {
+        dispatch(activityGanttAction(componentId));
+    };
     useEffect(()=>{
-        activitiesHandler()
-    }, [])
+        if(componentId != 0){
+            activitiesHandler()
+            activitiesGanttHandler()
+        }
+    }, [0])
 
     useEffect(()=>{
         if(activities != null){
             setDados(correctData)
-            console.log("Dados Kanban", correctData());
         }
     }, [activities])
 
@@ -256,19 +261,18 @@ export  function Kanban() {
                                     aria-label="secondary tabs example"
                                     centered={true}
                                 >
-                                    <Tab value="two" label="BOARD DE ACTIVIDADES" style={{color: '#167415', textTransform: 'none'}} />
+                                    <Tab value="one" label="Quadro de actividades" style={{color: '#167415', textTransform: 'none'}} />
                                     <Tab
-                                        value="one"
-                                        label="GESTÃO DE ACTIVIDADES"
+                                        value="two"
+                                        label="Gestão de actividades "
                                         style={{color: '#167415',  textTransform: 'none'}}
 
                                     />
-                                    <Tab value="three" label="DIAGRAMA DE GANTT" style={{color: '#167415', textTransform: 'none'}}/>
+                                    <Tab value="three" label="Diagrama de Gantt" style={{color: '#167415', textTransform: 'none'}}/>
                                 </Tabs>
                             </Box>
 
-                            <TabPanel value="one"><ActivitiesTable/></TabPanel>
-                            <TabPanel value="two">
+                            <TabPanel value="one">
                                 <Board
                                     customCardLayout={true}
                                     data={dados != null ? dados: data}
@@ -278,6 +282,8 @@ export  function Kanban() {
                                 >
                                     <CustomCard props={data}/>
                                 </Board></TabPanel>
+
+                            <TabPanel value="two"><ActivitiesTable/></TabPanel>
                             <TabPanel value="three"><GanttComponentAct/></TabPanel>
                         </TabContext>
 

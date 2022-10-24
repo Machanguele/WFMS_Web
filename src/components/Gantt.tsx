@@ -2,33 +2,82 @@
 import React, {useEffect, useState} from "react";
 import 'react-gantt-antd/lib/css/style.css'
 import { GanttOriginal, Task, ViewMode } from "react-gantt-chart";
+import {useTypeSelector} from "../hooks/useTypeSelector";
 
 export  function GanttComponentAct(){
+    const [taskData, setTasksData] = React.useState<Task[]>([]);
+
+    const {activities,isLoading, errorMessage, gantActivities} = useTypeSelector(
+        (state) => state.activity
+    );
+
+    const {componentId } = useTypeSelector(
+        (state) => state.component
+    );
+
+    const fillTasksHandler = ()=>{
+        let dataToReturn: Task[] = [];
+        if(gantActivities != null && gantActivities.component != null){
+            let dateHelper = new Date()
+            let aux:Task= {
+                type: "project",
+                id: `project${gantActivities.component?.id}`,
+                name: gantActivities.component?.title,
+                start: new Date(gantActivities.component.expectedStartDate),
+                end: new Date(gantActivities.component.expectedEndDate),
+                progress: 25,
+                hideChildren: false,
+            }
+            dataToReturn.push(aux);
+            gantActivities?.activities.map((item, id)=>{
+                 dataToReturn.push({
+                    type: "task",
+                    id: `task${item.id}`,
+                    name: `Actividade ${id+1}`,
+                    start: new Date(item.expectedStarDate),
+                    end: new Date(item.expectedEndDate),
+                    progress: item.status?.progress,
+                    project: aux.id,
+                })
+            })
+            setTasksData(dataToReturn)
+        }
+    }
+
+    useEffect(()=>{
+        if(componentId != 0)
+            fillTasksHandler()
+    }, [componentId])
+
+    console.log("tasks", taskData)
 
 
+
+
+/*
     let tasks: Task[] = [
         {
             type: "project",
             id: "ProjectSample",
-            name: "Recepcao de novos estufdantes",
+            name: "Recepcao de novos Estudantes",
             start: new Date(2021, 6, 1),
             end: new Date(2021, 12, 30),
             progress: 25,
-            hideChildren: false,
+            hideChildren: true,
         },
         {
             type: "task",
             id: "Task 0",
-            name: "1.1 Task",
+            name: "Reuniao dos finalistas",
             start: new Date(2021, 6, 1),
             end: new Date(2021, 6, 30),
-            progress: 45,
+            progress: 0,
             project: "ProjectSample",
         },
         {
             type: "task",
             id: "Task 1",
-            name: "1.2 Task",
+            name: "Organizacao do dia aberto",
             start: new Date('2021-07-01'),
             end: new Date(2021, 7, 30),
             progress: 25,
@@ -38,51 +87,42 @@ export  function GanttComponentAct(){
         {
             type: "task",
             id: "Task 2",
-            name: "1.3 Task",
+            name: "Publicação de Pautas",
             start: new Date(2021, 6, 1),
             end: new Date(2021, 7, 30),
-            progress: 10,
+            progress: 50,
             dependencies: ["Task 1"],
             project: "ProjectSample",
         },
         {
             type: "milestone",
             id: "Task 6",
-            name: "1.3.1 MileStone (KT)",
+            name: "Recepção de novos estudantes",
             start: new Date(2021, 6, 1),
             end: new Date(2021, 6, 30),
-            progress: 100,
+            progress: 75,
             dependencies: ["Task 2"],
             project: "ProjectSample",
         },
     ];
+*/
 
-    let data = [
-        { id: 1, start: new Date(2022, 10, 1), end: new Date(2022, 10, 10), name: "Demo Task 1" },
-        { id: 2, start: new Date(2022, 10, 6), end: new Date(2022, 10, 11), name: "Demo Task 2" },
-        { id: 3, start: new Date(2022, 10, 6), end: new Date(2022, 10, 11), name: "Demo Task 2" },
-        { id: 4, start: new Date(2022, 10, 6), end: new Date(2022, 10, 11), name: "Demo Task 2" },
-        { id: 5, start: new Date(2022, 10, 6), end: new Date(2022, 10, 11), name: "Demo Task 2" },
-        { id: 6, start: new Date(2022, 10, 6), end: new Date(2022, 10, 11), name: "Demo Task 2" },
-    ];
-    let links = [
-        { id: 1, start: 1, end: 2, color:'#ff00fa', selectedColor:'#ff00fa'},
-        { id: 2, start: 1, end: 3, color:'#ff00fa', selectedColor:'#ff00fa' }
-    ];
 
 
 
     return (
+        <>
+            {taskData != null && taskData.length>0?
+                <GanttOriginal
+                    tasks={taskData}
+                    viewMode={ViewMode.Month}
+                    columnWidth={200}
+                    ganttHeight={500}
+                    locale={"pt-PT"}
+                />:
+            <></>}
+        </>
 
-        /*<TimeLine
-
-            data={data} links={links} />*/
-        <GanttOriginal
-            tasks={tasks}
-            viewMode={ViewMode.Month}
-            columnWidth={200}
-            ganttHeight={200}
-        />
 
 
     );

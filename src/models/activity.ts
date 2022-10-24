@@ -24,3 +24,8 @@ export interface IActivity {
     status: IActivityStatus,
     activities: IActivityHelper[]
 }
+
+export interface IGanttActivity{
+    component: IComponent,
+    activities:IActivityHelper[]
+}

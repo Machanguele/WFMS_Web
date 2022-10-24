@@ -131,6 +131,10 @@ export default function ActivitiesTable() {
         console.log("Valor selecionado", event.target.value)
     };
 
+    const {componentId } = useTypeSelector(
+        (state) => state.component
+    );
+
 
 
 
@@ -151,7 +155,7 @@ export default function ActivitiesTable() {
                 setStatus("")
                 setSaveStatus(false)
                 setSaveAllocated(false)
-                dispatch(activityAction(22))
+                dispatch(activityAction(componentId))
             }, 1000)
         }
     };
@@ -165,7 +169,7 @@ export default function ActivitiesTable() {
                 setStatus("")
                 setSaveStatus(false)
                 setSaveAllocated(false)
-                dispatch(activityAction(22))
+                dispatch(activityAction(componentId))
             }, 1000)
         }
     };

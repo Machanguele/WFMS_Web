@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {Api} from "../../services/api";
 import {ActivityAction, ActivityActionTypes} from "../actionTypes/activityTypes";
-import {IActivity} from "../../models/activity";
+import {IActivity, IGanttActivity} from "../../models/activity";
 
 export const activityAction = (componentId: number) =>
     async (dispatch: Dispatch<ActivityAction>) => {
@@ -38,6 +38,60 @@ export const activityAction = (componentId: number) =>
         })
     }
     }
+
+
+export const activityGanttAction = (componentId: number) =>
+    async (dispatch: Dispatch<ActivityAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_GANTT
+            });
+
+            await api.get<IGanttActivity>(`activities/gantt/${componentId}`, {})
+                .then(response => {
+
+                    console.log("dados de retorno")
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ActivityActionTypes.ACTIVITY_GANTT_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ActivityActionTypes.ACTIVITY_GANTT_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_GANTT_FAIL,
+                payload: e
+            })
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 export const activityStatusAction = (activityStatus: string, activityId: number) =>

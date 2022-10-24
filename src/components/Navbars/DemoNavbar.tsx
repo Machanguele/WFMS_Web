@@ -141,6 +141,7 @@ function Header({props} : IHeaderProps) {
               nav
               isOpen={dropdownOpen}
               toggle={() => dropdownToggle()}
+
             >
               <DropdownToggle caret nav>
                 <i className="nc-icon nc-bell-55" />
