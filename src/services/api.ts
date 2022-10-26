@@ -22,3 +22,4 @@ export class Api {
         return api.delete<T>(url);
     }
 }
+

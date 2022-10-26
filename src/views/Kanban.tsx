@@ -245,6 +245,7 @@ export  function Kanban() {
     return (
             <div className="content content-center">
                 <Box>
+
                         <TabContext value={value}>
                             <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
                                 <Tabs
@@ -265,7 +266,7 @@ export  function Kanban() {
                                     <Tab
                                         value="two"
                                         label="Gestão de actividades "
-                                        style={{color: '#167415',  textTransform: 'none'}}
+                                        style={{color: '#167415',  textTransform: 'none', marginLeft: '1%', marginRight: '1%'}}
 
                                     />
                                     <Tab value="three" label="Diagrama de Gantt" style={{color: '#167415', textTransform: 'none'}}/>
@@ -278,25 +279,16 @@ export  function Kanban() {
                                     data={dados != null ? dados: data}
                                     draggable={false}
                                     editable={false}
-                                    style={{ background: 'transparent', color: 'green' }}
+                                    style={{ background: 'rgba(255, 255, 200, .1)', color: 'green', fontFamily: 'sans-serif', fontSize: '12pt' }}
                                 >
                                     <CustomCard props={data}/>
                                 </Board></TabPanel>
 
-                            <TabPanel value="two"><ActivitiesTable/></TabPanel>
+                            <TabPanel value="two">
+                                    <ActivitiesTable/>
+                            </TabPanel>
                             <TabPanel value="three"><GanttComponentAct/></TabPanel>
                         </TabContext>
-
-                    <Box sx={{marginTop: '10%', marginLeft:'2%' }}>
-                        <Button
-                            sx={{marginRight: '2%'}}
-                            color="success" link onClick={()=>{}}>
-                            Carregar planilha de actividades
-                            <CloudUploadIcon/>
-                        </Button>
-                    </Box>
-
-
                 </Box>
 
                {/* <Board

@@ -7,9 +7,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import '../assets/css/tabStyles.css'
-/*
-import {Tabs, Tab} from "react-bootstrap-tabs";
-*/
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -19,7 +16,6 @@ import { styled } from '@mui/material/styles';
 import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useEffect} from "react";
 import CircularProgress from '@mui/material/CircularProgress';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import EditIcon from '@mui/icons-material/Edit';
 
 import Dialog from '@mui/material/Dialog';
@@ -28,28 +24,32 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
-
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
 import {Row} from "react-bootstrap";
-import TextField from '@mui/material/TextField';
 
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
 import BuildIcon from '@mui/icons-material/Build';
 
 import {
     FormGroup,
     Label,
-    Input, DropdownToggle, DropdownMenu, DropdownItem, Dropdown
+    Input, DropdownToggle, DropdownMenu, DropdownItem, Dropdown, Button
 } from "reactstrap";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
-import {activityAction, activityStatusAction, allocateUserAction} from "../store/actionCreators/activity.actionCreator";
+import {
+    activityAction,
+    activityStatusAction,
+    allocateUserAction,
+    uploadActivityAction
+} from "../store/actionCreators/activity.actionCreator";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import {Tooltip} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
+
 
 
 
@@ -115,12 +115,15 @@ export default function ActivitiesTable() {
     const [isChanged, setIsChanged] = React.useState(false);
     const [saveStatus, setSaveStatus] = React.useState(false);
     const [saveAllocated, setSaveAllocated] = React.useState(false);
+    const [isUploadingFile, setIsUploadingFile] = React.useState(false);
+    const [isAddingFile, setIsAddingFile] = React.useState(false);
 
     const {activities,isLoading, errorMessage} = useTypeSelector(
         (state) => state.activity
     );
     const [status, setStatus] = React.useState('');
     const [selectedEmail, setSelectedEmail] = React.useState('');
+    const [uploadedFile, setUploadedFile] = React.useState<File>();
 
     const handleChangeStatus = (event: SelectChangeEvent) => {
         setStatus(event.target.value);
@@ -246,7 +249,7 @@ export default function ActivitiesTable() {
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
-            backgroundColor: value==='one'?'#5499C7': value=='two'? '#45B39D': value==='three'? '#17A589' :'#148F77',
+            backgroundColor: value==='one'?'rgba(20,143,119,.7)': value=='two'? '#45B39D': value==='three'? '#17A589' :'#148F77',
             color: theme.palette.common.white,
         },
         [`&.${tableCellClasses.body}`]: {
@@ -256,7 +259,7 @@ export default function ActivitiesTable() {
 
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(odd)': {
-            backgroundColor: '#E8F8F5',
+            backgroundColor: '#FEF9E7',
         },
         // hide last border
         '&:last-child td, &:last-child th': {
@@ -278,6 +281,28 @@ export default function ActivitiesTable() {
             new Date(data).toLocaleDateString("pt-PT"):
             data
     }
+
+    const closeActivitiesHandler =()=>{
+        setIsAddingFile(false)
+        setIsUploadingFile(false)
+    }
+    const saveFile = (e) =>{
+        setUploadedFile(e.target.files[0])
+    }
+
+    const handleUploadFiles =()=>{
+        if(uploadedFile != null){
+            let data: FormData;
+            data = new FormData();
+
+            data.append("componentId", `${componentId}`)
+            data.append("file", uploadedFile)
+            console.log("O formmmmmmmmmmmmmmmmm File", data)
+            dispatch(uploadActivityAction(data))
+        }
+    }
+
+    console.log("Ficheiroooooooooooooo", uploadedFile)
 
 
     const ModalActivities = ()=>{
@@ -443,6 +468,49 @@ export default function ActivitiesTable() {
 
     }
 
+    const UploadActivities =()=>{
+        return(
+            <Box>
+                <Box sx={{display: 'flex', justifyContent: 'center', marginTop: '5%'}}>
+
+                    {uploadedFile?.name && <p>Ficheiro carregado: {uploadedFile?.name}</p>}
+
+
+                    <IconButton color="warning" aria-label="upload picture" component="label">
+                        <input
+                            hidden
+                            accept=".xlsx, .xls, .csv"
+                            type="file"
+                            onChange={saveFile}
+                        />
+                        <AttachFileIcon fontSize={"large"}/>
+                    </IconButton>
+                </Box>
+                <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                    <Row>
+                        <p style={{marginTop:'1.8%', ...tablesStyles.modalTitle}}>
+                            Carregue o arquivo de actividades (Somente nos formatos: .xlsx, .xls e .csv)</p>
+                    </Row>
+                </Box>
+                <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                    <Button
+                        style={{borderRadius: 5}}
+                        color="success" link onClick={handleUploadFiles}>
+                        Gravar
+                    </Button>
+                </Box>
+            </Box>
+        )
+    }
+
+    const AddActivity =()=>{
+        return(
+            <Box>
+
+            </Box>
+        )
+    }
+
 
     const FindActivities=({data}: IFindActivitiesPros)=>{
         return(
@@ -525,7 +593,7 @@ export default function ActivitiesTable() {
                                     <Tab
                                         value="one"
                                         label="Por Fazer"
-                                        style={{backgroundColor: '#5499C7', color: '#F7F9F9',  textTransform: 'none', marginRight: '1%'}}
+                                        style={{backgroundColor: 'rgba(20,143,119,.7)', color: '#F7F9F9',  textTransform: 'none', marginRight: '1%'}}
 
                                     />
 
@@ -538,7 +606,45 @@ export default function ActivitiesTable() {
                                 </Tabs>
                             </Box>
 
-                            <TabPanel value="one"><FindActivities data={dataTodo}/></TabPanel>
+                            <TabPanel value="one">
+                                <Box>
+                                    <Box sx={{marginTop: '1%', marginRight:'2%' }}>
+                                        <Row>
+                                            {(!isAddingFile && !isUploadingFile) &&
+                                                <Box>
+                                                    <Tooltip
+                                                        title={"Carregar arquivo de actividades (.xls)"}
+                                                    >
+                                                        <IconButton aria-label="fingerprint" color="success"
+                                                                    onClick={() => setIsUploadingFile(true)}>
+                                                            <CloudUploadIcon fontSize={"large"}/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title={"Adicionar actividade"} onClick={()=>setIsAddingFile(true)}>
+                                                        <IconButton aria-label="fingerprint" color="success">
+                                                            <AddCircleIcon fontSize={"large"}/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Box>
+                                            }
+
+                                            {(isUploadingFile || isAddingFile) &&
+                                                <Tooltip
+                                                title={"Fechar"}
+                                            >
+                                                <IconButton aria-label="fingerprint" color="warning"
+                                                            onClick={() => closeActivitiesHandler()}>
+                                                    <CloseIcon fontSize={"medium"}/>
+                                                </IconButton>
+                                            </Tooltip>}
+                                        </Row>
+                                    </Box>
+                                    {isUploadingFile && <UploadActivities/>}
+                                    {(!isUploadingFile && !isAddingFile) && <FindActivities data={dataTodo}/>}
+
+                                </Box>
+
+                            </TabPanel>
                             <TabPanel value="two"><FindActivities data={dataInProgress}/></TabPanel>
                             <TabPanel value="three"><FindActivities data={dataInReview}/></TabPanel>
                             <TabPanel value="four"><FindActivities data={dataFinished}/></TabPanel>

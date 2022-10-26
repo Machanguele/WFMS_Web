@@ -38,6 +38,7 @@ import {
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
+import InfoIcon from '@mui/icons-material/Info';
 
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Box from "@mui/material/Box";
@@ -47,6 +48,8 @@ import {
     Input,
     FormText
 } from "reactstrap";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import IconButton from "@mui/material/IconButton";
 // core components
 
 
@@ -77,11 +80,34 @@ const cardStyles = {
       display: 'flex',
       alignContent: 'left',
       justifyContent: 'flexStart',
+      backgroundColor: "rgba(255, 255, 200, .8)",
+      borderLeftWidth: 8,
+      borderLeft: '5px solid #F39C12',
   },
   cardDetails:{
       display: 'flex',
       justifyContent: 'flexStart'
-  }
+  },
+    inputStyles:{
+/*
+      backgroundColor: '#FEF9E7',
+*/
+      borderColor: '#167415',
+      borderWidth: 1,
+      fontSize: '12pt',
+      fontFamily: 'sans-serif'
+    },
+    inputLabels:{
+      color: '#167415',
+      fontSize: '12pt',
+      fontFamily: 'sans-serif'
+    },
+    infoLabels:{
+        color: '#F39C12',
+        fontSize: '11pt',
+        fontFamily: 'sans-serif',
+        marginTop: '1.7%'
+    }
 }
 
 function Component() {
@@ -129,138 +155,171 @@ function Component() {
   return (
     <>
       <div className="content">
-        <Row >
-          <Box sx={{marginLeft: '1%'}}>
-              <Button
+          <Box sx={{backgroundColor: '#FFFFFF', width: '100%', margin: 'auto', marginTop: '1%', borderRadius: 4, padding: '1%'}}>
+              <Row>
+                  <Box sx={{marginLeft: '1%'}}>
+                      {!addComponent && <Button
 
-                  color="success" link onClick={()=>setAddComponent(true)}>
-                  Adicionar componente
-                  <AddCircleIcon/>
-              </Button>
+                          color="success" link onClick={() => setAddComponent(true)}
+                          style={{borderRadius: 7}}
+                      >
+                          <span style={{color: '#FFFFFF'}}>Adicionar componente</span>
+                          <AddCircleIcon fontSize={'small'}/>
+                      </Button>}
+
+                      {addComponent &&
+                          <IconButton color="warning" aria-label="upload picture" component="label" onClick={() => setAddComponent(false)}>
+                            <CloseIcon fontSize={"large"}/>
+                          </IconButton>
+                      }
+                  </Box>
+              </Row>
 
               {addComponent &&
-                  <Button
-                      sx={{marginLeft: '2%'}}
-                      color="warning" link onClick={() => setAddComponent(false)}>
-                      Fechar
-                      <CloseIcon/>
-                  </Button>
+                      <Box sx={{width: '100%', padding: '2%', marginTop: '1%', borderRadius: 1, display: 'flex', justifyContent: 'center'}}>
+                          <Box sx={{width: '100%'}}>
+                              <form>
+                                  <FormGroup>
+                                      <Label for="exampleEmail" style={cardStyles.inputLabels} >Título</Label>
+                                      <Input
+                                          style={cardStyles.inputStyles}
+                                          type="text"
+                                          name="text"
+                                          id="exampleEmail"
+                                          placeholder="Título do componente"
+                                          value={title}
+                                          onChange={(value)=>setTitle(value.target.value)}
+                                      />
+                                      <FormText color="muted">
+                                          ex: Plano de inserção de novos ingressos
+                                      </FormText>
+                                  </FormGroup>
+
+                                  <FormGroup>
+                                      <Label for="exampleText" style={cardStyles.inputLabels}>Descrição</Label>
+                                      <Input type="textarea" name="text" id="exampleText"
+                                             style={cardStyles.inputStyles}
+                                             onChange={(value)=>setDescription(value.target.value)}
+                                      />
+                                  </FormGroup>
+
+                                      <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                          <Row>
+                                              <Box style={{marginLeft: '4%'}}>
+                                                  <FormGroup>
+                                                      <Label for="exampleText" style={cardStyles.inputLabels}>Espectativa de início</Label>
+                                                      <Input type="date" name="text" id="exampleText"
+                                                             style={cardStyles.inputStyles}
+                                                      />
+                                                  </FormGroup>
+
+                                              </Box>
+
+                                              <Box style={{marginLeft: '4%'}}>
+                                                  <FormGroup>
+                                                      <Label for="exampleText" style={cardStyles.inputLabels}>Espectativa de fim</Label>
+                                                      <Input type="date" name="text" id="exampleText"
+                                                             style={cardStyles.inputStyles}
+                                                      />
+                                                  </FormGroup>
+                                              </Box>
+
+                                          </Row>
+                                      </Box>
+
+                                  {addComponent && <Box sx={{display: 'flex', justifyContent: 'center', marginTop: '1%'}}>
+                                      <Row>
+                                          <IconButton color="warning" component="label">
+                                              <InfoIcon fontSize={"large"}/>
+                                          </IconButton>
+                                          <p style={cardStyles.infoLabels}>Criação do componente</p>
+                                          <p style={cardStyles.infoLabels}>Informe os campos abaixo. A posterior, pode criar as actividades
+                                              para este componente, de modo a seguir o workflow</p>
+                                      </Row>
+                                  </Box>}
+
+
+                                  <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                                      <Button
+                                          style={{borderRadius: 5}}
+                                          color="success" link onClick={handleCreateComponent}>
+                                          Gravar
+                                      </Button>
+                                  </Box>
+                              </form>
+                          </Box>
+                      </Box>
               }
-          </Box>
-        </Row>
-
-          {addComponent &&
-              <Box sx={{backgroundColor: '#FFFFFF', width: '90%', padding: '2%', marginTop: '2%'}}>
-                  <form>
-                      <FormGroup>
-                          <Label for="exampleEmail" color={"#138D75"} >Título</Label>
-                          <Input
-                              type="text"
-                              name="text"
-                              id="exampleEmail"
-                              placeholder="Título do componente"
-                              value={title}
-                              onChange={(value)=>setTitle(value.target.value)}
-                          />
-                          <FormText color="muted">
-                             ex: Plano de inserção de novos ingressos
-                          </FormText>
-                      </FormGroup>
-
-                      <FormGroup>
-                          <Label for="exampleText">Descrição</Label>
-                          <Input type="textarea" name="text" id="exampleText"
-                                 onChange={(value)=>setDescription(value.target.value)}
-                          />
-                      </FormGroup>
-
-                      <FormGroup>
-                          <Label for="exampleText">Espectativa início</Label>
-                          <Input type="date" name="text" id="exampleText" />
-                      </FormGroup>
-
-                      <FormGroup>
-                          <Label for="exampleText">Espectativa de fim</Label>
-                          <Input type="date" name="text" id="exampleText" />
-                      </FormGroup>
-
-                      <Button
-                          sx={{marginTop: '10%'}}
-                          color="success" link onClick={handleCreateComponent}>
-                          Gravar
-                          <SaveIcon/>
-                      </Button>
-                  </form>
-              </Box>
-          }
 
 
-          {!addComponent && <Row>
-              {components.map((item, id) => {
-                  return <Col lg="3" md="6" sm="6" key={id}>
-                      <Card className="card-stats" style={cardStyles.cardStyle}>
-                          <CardBody>
-                              <Row>
-                                  <Col md="11" xs="7">
-                                      <div className="numbers">
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Componente:</span>
-                                              <span style={cardStyles.detailValue}>{item.title}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Criado em:</span>
-                                              <span style={cardStyles.detailValue}>{item.createdAt}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
-                                              <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Iniciada em:</span>
-                                              <span
-                                                  style={cardStyles.detailValue}>{item.startedDate ? item.startedDate : "Não iniciado"}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
-                                              <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Concluido em:</span>
-                                              <span
-                                                  style={cardStyles.detailValue}>{item.actualEndDate ? item.actualEndDate : "Não concluído"}</span>
-                                          </p>
-                                          <p className="card-category">
-                                              <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
-                                              <span
-                                                  style={cardStyles.cardStyle}>{item.activities?.length + " / " + item.finishedActivities}</span>
-                                          </p>
-                                      </div>
-                                  </Col>
-                              </Row>
-                          </CardBody>
-                          <CardFooter>
-                              <hr/>
-                              <div className="stats">
-                                  <div style={cardStyles.detailsButton}>
-                                      <a href='##' onClick={() => onClickDetails(item.id)}>
-                                          ver Actividades
-                                          {/*
+              {!addComponent && <Row>
+                  {components.map((item, id) => {
+                      return <Col lg="3" md="6" sm="6" key={id}>
+                          <Card className="card-stats" style={cardStyles.cardStyle}>
+                              <CardBody>
+                                  <Row>
+                                      <Col md="11" xs="7">
+                                          <div className="numbers">
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Componente:</span>
+                                                  <span style={cardStyles.detailValue}>{item.title}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Criado em:</span>
+                                                  <span style={cardStyles.detailValue}>{item.createdAt}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
+                                                  <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Iniciada em:</span>
+                                                  <span
+                                                      style={cardStyles.detailValue}>{item.startedDate ? item.startedDate : "Não iniciado"}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
+                                                  <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Concluido em:</span>
+                                                  <span
+                                                      style={cardStyles.detailValue}>{item.actualEndDate ? item.actualEndDate : "Não concluído"}</span>
+                                              </p>
+                                              <p className="card-category">
+                                                  <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
+                                                  <span
+                                                      style={cardStyles.detailValue}>{item.activities?.length + " / " + item.finishedActivities}</span>
+                                              </p>
+                                          </div>
+                                      </Col>
+                                  </Row>
+                              </CardBody>
+                              <CardFooter>
+                                  <hr/>
+                                  <div className="stats">
+                                      <div style={cardStyles.detailsButton}>
+                                          <a href='##' onClick={() => onClickDetails(item.id)}>
+                                              ver Actividades
+                                              {/*
                               <RemoveRedEyeOutlinedIcon className={"warning-color"} />
 */}
-                                      </a>
-                                  </div>
+                                          </a>
+                                      </div>
 
 
-                                  {/*
+                                      {/*
                   <i className="fas fa-sync-alt" /> Update Now
 */}
-                              </div>
-                          </CardFooter>
-                      </Card>
-                  </Col>
-              })}
-          </Row>}
+                                  </div>
+                              </CardFooter>
+                          </Card>
+                      </Col>
+                  })}
+              </Row>}
+          </Box>
       </div>
+
     </>
   );
 }

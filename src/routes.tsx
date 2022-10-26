@@ -53,6 +53,14 @@ const routes = [
 		invisible: true,
 	},
 	{
+		path: "/estatisticas",
+		name: "Estatísticas",
+		icon: "nc-icon nc-chart-bar-32",
+		component: Kanban,
+		layout: "/admin",
+		invisible: false,
+	},
+	{
 		path: "/icons",
 		name: "Icons",
 		icon: "nc-icon nc-diamond",
@@ -77,7 +85,7 @@ const routes = [
 		icon: "nc-icon nc-settings",
 		component: Typography,
 		layout: "/admin",
-		invisible: true,
+		invisible: false,
 	},
 
 	{

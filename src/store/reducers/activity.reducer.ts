@@ -41,6 +41,12 @@ const activityReducer = (state: IActivityState = initialState, action: ActivityA
             return {...state, isLoading: false, gantActivities: action.payload}
         case ActivityActionTypes.ACTIVITY_GANTT_FAIL:
             return {...state, isLoading: false}
+        case ActivityActionTypes.UPLOAD_ACTIVITIES:
+            return {...state, isLoading: true}
+        case ActivityActionTypes.UPLOAD_ACTIVITIES_SUCCESS:
+            return {...state, isLoading: false}
+        case ActivityActionTypes.UPLOAD_ACTIVITIES_FAIL:
+            return {...state, isLoading: false}
         default:
             return state;
     }
