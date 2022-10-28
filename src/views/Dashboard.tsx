@@ -106,6 +106,9 @@ function Dashboard() {
         (state) => state.activity
     );
 
+    const [concluidas, setConcluidas] = React.useState<number>(0);
+    const [planeadas, setPlaneadas] = React.useState<number>(0);
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -113,16 +116,18 @@ function Dashboard() {
         dispatch(activitySumAction())
     }, [])
 
-    const componentHandler = () => {
-        dispatch(componentAction());
-    };
+    useEffect(()=>{
+        if(countActivities != null && countActivities.length>0){
+            var totPlaneadas = 0;
+            countActivities.map((item)=>{
+                if(item.name == "Concluídas")
+                    setConcluidas(item.quantity)
+                totPlaneadas += item.quantity;
+            })
+            setPlaneadas(totPlaneadas)
 
-    const sumActivities: SummaryActivities[]=[
-        {name: "Por fazer", quantity: 50, color: '#F39C12'},
-        {name: "Em progresso", quantity: 15, color: '#3498DB'},
-        {name: "Em Revisão", quantity: 5, color: '#2ECC71'},
-        {name: "Em Concluidas", quantity: 30, color: '#27AE60'},
-    ]
+        }
+    }, [countActivities])
 
    const options = {
     responsive: true,
@@ -138,8 +143,8 @@ function Dashboard() {
   };
 
   const labels = ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro (Corrente)'];
-  const data1 =[190, 178, 200, 79, 100]
-  const data2 =[185, 140, 197, 65, 30]
+  const data1 =[190, 178, 200, 79, planeadas]
+  const data2 =[185, 140, 197, 65, concluidas]
 
     const dataPlaned = {
         labels,

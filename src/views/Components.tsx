@@ -123,7 +123,7 @@ function Component() {
   const [departmentId, setDepartmentId] = useState(3);
   const [description, setDescription] = useState("");
   const [expectedStartDate, setExpectedStartDate] = useState("2022-10-10");
-  const [expectedEndDate, setExpectedEndDate] = useState("2022-10-12");
+  const [expectedEndDate, setExpectedEndDate] = useState("2022-12-31");
   const [addComponent, setAddComponent] = useState(false);
 
 
@@ -146,10 +146,10 @@ function Component() {
   const handleCreateComponent = ()=>{
 
       dispatch(addComponentAction(title, departmentId, description, expectedStartDate, expectedEndDate))
+      setAddComponent(false)
       setTimeout(()=>{
-          setAddComponent(false)
           componentHandler()
-      }, 1000)
+      }, 500)
   }
 
   useEffect(()=>{
