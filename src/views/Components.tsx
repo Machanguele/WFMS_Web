@@ -155,8 +155,9 @@ function Component() {
   return (
     <>
       <div className="content">
-          <Box sx={{backgroundColor: '#FFFFFF', width: '100%', margin: 'auto', marginTop: '1%', borderRadius: 4, padding: '1%'}}>
-              <Row>
+          <Box sx={{backgroundColor: '#FFFFFF', width: '100%', margin: 'auto', marginTop: '1%', borderRadius: 4, borderLeftWidth: 8,
+              borderLeft: addComponent?'8px solid #F39C12': 'none'}}>
+              <Box>
                   <Box sx={{marginLeft: '1%'}}>
                       {!addComponent && <Button
 
@@ -168,15 +169,19 @@ function Component() {
                       </Button>}
 
                       {addComponent &&
-                          <IconButton color="warning" aria-label="upload picture" component="label" onClick={() => setAddComponent(false)}>
-                            <CloseIcon fontSize={"large"}/>
-                          </IconButton>
+                          <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                              <IconButton color="warning" aria-label="upload picture" component="label" onClick={() => setAddComponent(false)}>
+                                  <CloseIcon fontSize={"large"}/>
+                              </IconButton>
+                          </Box>
                       }
                   </Box>
-              </Row>
+              </Box>
 
               {addComponent &&
-                      <Box sx={{width: '100%', padding: '2%', marginTop: '1%', borderRadius: 1, display: 'flex', justifyContent: 'center'}}>
+                      <Box sx={{width: '100%', padding: '2%', marginTop: '1%', borderRadius: 1, display: 'flex',
+                          justifyContent: 'center'
+                      }}>
                           <Box sx={{width: '100%'}}>
                               <form>
                                   <FormGroup>

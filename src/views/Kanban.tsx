@@ -1,9 +1,7 @@
-import ReactDOM from "react-dom";
 import React, {useEffect, useState} from "react";
 import Board from 'react-trello'
 import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
-import {useHistory} from "react-router";
 import {activityAction, activityGanttAction} from "../store/actionCreators/activity.actionCreator";
 import {IActivityHelper} from "../models/activity";
 import {Button} from "reactstrap";
@@ -14,14 +12,12 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import SaveIcon from "@mui/icons-material/Save";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
 export  function Kanban() {
 
     const [dados, setDados] = useState<Ilanes>();
-    const {activities,isLoading, errorMessage, gantActivities} = useTypeSelector(
+    const {activities, gantActivities} = useTypeSelector(
         (state) => state.activity
     );
     const {componentId } = useTypeSelector(
@@ -31,7 +27,6 @@ export  function Kanban() {
     console.log("O gant: ", gantActivities)
 
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const activitiesHandler = () => {
         dispatch(activityAction(componentId));
@@ -234,14 +229,6 @@ export  function Kanban() {
         ]
     }
 
-    const components = {
-        AddCardLink:      () => <button>New Card</button>,
-        /*LaneHeader:       CustomLaneHeader,
-        NewCardForm:      NewCard,
-        NewLaneSection:   NewLane,*/
-        Card:             CustomCard
-    };
-
     return (
             <div className="content content-center">
                 <Box>
@@ -251,7 +238,7 @@ export  function Kanban() {
                                 <Tabs
                                     TabIndicatorProps={{
                                         style: {
-                                            backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
+                                            backgroundColor: value==='one'?"#F39C12": value==='two'?'#2E86C1':'#8E44AD',
                                             borderWidth: 4,
                                         }
                                     }}

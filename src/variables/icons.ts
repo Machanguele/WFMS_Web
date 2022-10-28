@@ -417,6 +417,10 @@ const icons = [
     name: "nc-zoom-split",
     content: "\\ea64",
   },
+  {
+    name: "nc-users",
+    content: "\\e97c"
+  }
 ];
 
 export default icons;

@@ -249,7 +249,7 @@ export default function ActivitiesTable() {
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
-            backgroundColor: value==='one'?'rgba(20,143,119,.7)': value=='two'? '#45B39D': value==='three'? '#17A589' :'#148F77',
+            backgroundColor: value==='one'?'rgba(20,143,119,.7)': value==='two'? '#45B39D': value==='three'? '#17A589' :'#148F77',
             color: theme.palette.common.white,
         },
         [`&.${tableCellClasses.body}`]: {

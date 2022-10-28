@@ -56,39 +56,7 @@ ChartJS.register(
     Legend
 );
 
-const cStyles ={
-    cardStyle:{
-        alignItems: 'left',
-        marginLeft: 0,
-        paddingLeft: '1%',
-        display: 'flex',
-        alignContent: 'left',
-        justifyContent: 'flexStart',
-        backgroundColor: "rgba(255, 255, 200, .8)",
-/*
-        borderLeftWidth: 8,
-*/
-        /*borderLeft: '5px solid',*/
-        paddingTop: '3%',
-        paddingBottom: '3%'
-
-    },
-    cardTitle:{
-        marginRight: '2%',
-        marginLeft: '2%',
-        fontSize: '13pt',
-        fontFamily: 'sans-serif',
-        color: '#515A5A'
-    },
-}
-
-interface SummaryActivities{
-  name: string,
-  quantity: number,
-  color: string
-}
-
-function Dashboard() {
+function Estatistica() {
 
 
     const [value, setValue] = React.useState('one');
@@ -96,13 +64,6 @@ function Dashboard() {
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
-
-    const sumActivities: SummaryActivities[]=[
-        {name: "Por fazer", quantity: 50, color: '#F39C12'},
-        {name: "Em progresso", quantity: 15, color: '#3498DB'},
-        {name: "Em Revisão", quantity: 5, color: '#2ECC71'},
-        {name: "Em Concluidas", quantity: 30, color: '#27AE60'},
-    ]
 
    const options = {
     responsive: true,
@@ -117,9 +78,9 @@ function Dashboard() {
     },
   };
 
-  const labels = ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro (Corrente)'];
-  const data1 =[190, 178, 200, 79, 100]
-  const data2 =[185, 140, 197, 65, 30]
+  const labels = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+  const data1 =[100, 78, 200, 69, 44, 230]
+  const data2 =[90, 78, 197, 65, 44, 220]
 
     const dataPlaned = {
         labels,
@@ -152,12 +113,12 @@ function Dashboard() {
       {
         label: 'Paneadas',
         data: data1,
-        backgroundColor: value =="two"? 'rgba(255, 203, 35, 1)': '#F39C12',
+        backgroundColor: value =="two"? 'rgba(255, 203, 35, 1)': 'rgba(255, 203, 35, 0.5)',
       },
       {
         label: 'Concluidas',
         data: data2,
-        backgroundColor: value=="two"? 'rgba(22, 116, 21, 1)': '#27AE60',
+        backgroundColor: value=="two"? 'rgba(22, 116, 21, 1)': 'rgba(22, 116, 21, 0.5)',
       },
     ],
   };
@@ -167,34 +128,36 @@ function Dashboard() {
   return (
     <>
       <div className="content">
-        <Row>
-          {sumActivities.map((item, id)=>
-              <Col lg="3" md="6" sm="6" key={id + 1}>
-                <Card className="card-stats" style={{ borderLeft: `7px solid ${item.color}`, ...cStyles.cardStyle}}>
-                  <CardBody key={id + 1}>
-                    <Box>
-                        <Row>
-                          <span style={cStyles.cardTitle}>{item.name}</span>
-                        </Row>
-                    </Box>
-                  </CardBody>
-                  <CardFooter>
-                    <hr/>
-{/*
-                      <span style={cStyles.cardTitle}>Total</span>
-*/}
-                      <span style={{color: item.color, marginRight: '2%', marginLeft: '2%', fontSize: '13pt',
-                          fontFamily: 'sans-serif',
-                      }}>{item.quantity}</span>
-                    {/*<div className="stats">
+        {/*<Row>
+          <Col lg="3" md="6" sm="6">
+            <Card className="card-stats">
+              <CardBody>
+                <Row>
+                  <Col md="4" xs="5">
+                    <div className="icon-big text-center icon-warning">
+                      <i className="ti-bar-chart text-warning" />
+                    </div>
+                  </Col>
+                  <Col md="8" xs="7">
+                    <div className="numbers">
+                      <p className="card-category">Administractivas</p>
+                      <CardTitle tag="p">50/71</CardTitle>
+                      <p />
+                    </div>
+                  </Col>
+                </Row>
+              </CardBody>
+              <CardFooter>
+                <hr />
+                <div className="stats">
 
-                    <i className="fas fa-sync-alt" /> Update Now
+                  <i className="fas fa-sync-alt" /> Update Now
 
-                  </div>*/}
-                  </CardFooter>
-                </Card>
-              </Col>)}
-          {/*<Col lg="3" md="6" sm="6">
+                </div>
+              </CardFooter>
+            </Card>
+          </Col>
+          <Col lg="3" md="6" sm="6">
             <Card className="card-stats">
               <CardBody>
                 <Row>
@@ -283,11 +246,10 @@ function Dashboard() {
                 </div>
               </CardFooter>
             </Card>
-          </Col>*/}
-        </Row>
+          </Col>
+        </Row>*/}
 
-        <Line options={options} data={data}  height={100} />
-          {/*<TabContext value={value}>
+          <TabContext value={value}>
               <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
                   <Tabs
                       TabIndicatorProps={{
@@ -303,33 +265,33 @@ function Dashboard() {
                       aria-label="secondary tabs example"
                       centered={true}
                   >
-                      <Tab value="two" label="Resumo por linhas" style={{color: '#167415', textTransform: 'none'}} />
                       <Tab
                           value="one"
                           label="Resumo por barras"
                           style={{color: '#167415',  textTransform: 'none'}}
                       />
+                      <Tab value="two" label="Resumo por linhas" style={{color: '#167415', textTransform: 'none'}} />
                       <Tab value="three" label="Fluxo de Execução" style={{color: '#167415', textTransform: 'none'}}/>
                       <Tab value="four" label="Fluxo de Planeamento" style={{color: '#167415', textTransform: 'none'}}/>
                   </Tabs>
               </Box>
 
               <TabPanel value="one">
-                  <Bar options={options} data={data} />
+                  <Bar options={options} data={data} height={120} />
               </TabPanel>
               <TabPanel value="two">
-                  <Line options={options} data={data} />
+                  <Line options={options} data={data} height={120}/>
               </TabPanel>
               <TabPanel value="three">
-                  <Bar options={options} data={dataExecution} />
+                  <Bar options={options} data={dataExecution} height={120} />
               </TabPanel>
               <TabPanel value="four">
-                  <Bar options={options} data={dataPlaned} />
+                  <Bar options={options} data={dataPlaned} height={120}/>
               </TabPanel>
-          </TabContext>*/}
+          </TabContext>
       </div>
     </>
   );
 }
 
-export default Dashboard;
+export default Estatistica;

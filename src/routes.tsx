@@ -9,6 +9,7 @@ import UserPage from "../src/views/User";
 import {Kanban} from "./views/Kanban";
 import Departament from "./views/Departament";
 import Component from "./views/Components";
+import Estatistica from "./views/Estatisticas";
 
 const routes = [
 	{
@@ -30,7 +31,7 @@ const routes = [
 	{
 		path: "/dashboard",
 		name: "Dashboard",
-		icon: "nc-icon nc-chart-bar-32",
+		icon: "nc-icon nc-map-big",
 		component: Dashboard,
 		layout: "/admin",
 		invisible: false,
@@ -53,10 +54,10 @@ const routes = [
 		invisible: true,
 	},
 	{
-		path: "/estatisticas",
-		name: "Estatísticas",
+		path: "/relatorios",
+		name: "Relatórios",
 		icon: "nc-icon nc-chart-bar-32",
-		component: Kanban,
+		component: Estatistica,
 		layout: "/admin",
 		invisible: false,
 	},
@@ -72,18 +73,18 @@ const routes = [
 
 	{
 		path: "/tables",
-		name: "Departamentos",
-		icon: "nc-icon nc-caps-small",
+		name: "Utilizadores",
+		icon: "nc-icon nc-settings-gear-65",
 		component: Departament,
 		layout: "/admin",
 		invisible: true,
 	},
 
 {
-		path: "/Configurações",
+		path: "/Configuracoes",
 		name: "Configurações",
-		icon: "nc-icon nc-settings",
-		component: Typography,
+		icon: "nc-icon nc-settings-gear-65",
+		component: Departament,
 		layout: "/admin",
 		invisible: false,
 	},
@@ -100,10 +101,18 @@ const routes = [
 		path: "/user-page",
 		name: "Meu Perfil",
 		icon: "nc-icon nc-single-02",
-		component: UserPage,
+		component: Departament,
 		layout: "/admin",
 		invisible: false,
 	},
+/*	{
+		path: "/user-page",
+		name: "Meu Perfil",
+		icon: "nc-icon nc-single-02",
+		component: UserPage,
+		layout: "/admin",
+		invisible: false,
+	},*/
 
 	{
 		path: "/typography",
