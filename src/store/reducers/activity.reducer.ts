@@ -1,18 +1,22 @@
 import {IActivity, IGanttActivity} from "../../models/activity";
 import {ActivityAction, ActivityActionTypes} from "../actionTypes/activityTypes";
+import {ISumActivities} from "../../models/ISumActivities";
 
 export interface IActivityState {
     activities: IActivity[],
     gantActivities: IGanttActivity
     isLoading: boolean,
     errorMessage: string,
+    countActivities: ISumActivities[];
 }
 
 const initialState: IActivityState = {
     isLoading: false,
     errorMessage: "",
     activities: [] as IActivity[],
-    gantActivities: {} as IGanttActivity
+    gantActivities: {} as IGanttActivity,
+    countActivities: [] as ISumActivities[]
+
 }
 
 const activityReducer = (state: IActivityState = initialState, action: ActivityAction) => {
@@ -46,6 +50,12 @@ const activityReducer = (state: IActivityState = initialState, action: ActivityA
         case ActivityActionTypes.UPLOAD_ACTIVITIES_SUCCESS:
             return {...state, isLoading: false}
         case ActivityActionTypes.UPLOAD_ACTIVITIES_FAIL:
+            return {...state, isLoading: false}
+        case ActivityActionTypes.LOAD_SUM_ACTIVITIES:
+            return {...state, isLoading: true}
+        case ActivityActionTypes.LOAD_SUM_ACTIVITIES_SUCCESS:
+            return {...state, isLoading: false, countActivities: action.payload}
+        case ActivityActionTypes.LOAD_SUM_ACTIVITIES_FAIL:
             return {...state, isLoading: false}
         default:
             return state;

@@ -16,5 +16,6 @@ export interface IComponent {
     componentStatus: IComponentStatus,
     department: IDepartment,
     activities: IActivity[],
-    finishedActivities: number
+    finishedActivities: number,
+    finished: boolean
 }

@@ -19,7 +19,7 @@ function Departament() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Pagina em Desenvolvimento</CardTitle>
+                <CardTitle tag="h4">Página em Desenvolvimento</CardTitle>
               </CardHeader>
             </Card>
           </Col>

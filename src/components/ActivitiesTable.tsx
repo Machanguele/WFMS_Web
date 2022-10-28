@@ -5,7 +5,6 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import '../assets/css/tabStyles.css'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -49,7 +48,16 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import {Tooltip} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
+
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Stack from '@mui/material/Stack';
 
 
 
@@ -86,9 +94,13 @@ interface RowTypes{
     id: number,
     activity: string,
     expectedStartDay: string,
+/*
     stardDay: string,
+*/
     expectedEndDay: string,
+/*
     endDay: string,
+*/
     allocatedTo: string,
     description: string,
     createdAt: string,
@@ -193,15 +205,19 @@ export default function ActivitiesTable() {
         id: number,
         activity: string,
         expectedStartDay: string,
+/*
         stardDay: string,
+*/
         expectedEndDay: string,
+/*
         endDay: string,
+*/
         allocatedTo: string,
         description: string,
         createdAt: string,
         status: string
     ) {
-        return { id, activity, expectedStartDay, stardDay, expectedEndDay, endDay, allocatedTo, description, createdAt, status};
+        return { id, activity, expectedStartDay, expectedEndDay, allocatedTo, description, createdAt, status};
     }
 
 
@@ -214,26 +230,25 @@ export default function ActivitiesTable() {
         activities.map((item, key)=>{
             if(item.status.name==="Por fazer"){
                 item.activities.map((act, key)=>{
-                    dataTodo.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
-                        act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
+                    dataTodo.push(createData(act.id, act.name, act.expectedStarDate, act.expectedEndDate, act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
             if(item.status.name==="Em andamento"){
                 item.activities.map((act, key)=>{
-                    dataInProgress.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
-                        act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
+                    dataInProgress.push(createData(act.id, act.name, act.expectedStarDate, act.expectedEndDate,
+                        act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
             if(item.status.name==="Em Revisão"){
                 item.activities.map((act, key)=>{
-                    dataInReview.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
-                        act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
+                    dataInReview.push(createData(act.id, act.name, act.expectedStarDate, act.expectedEndDate,
+                        act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
-            if(item.status.name==="Concluido"){
+            if(item.status.name==="Concluídas"){
                 item.activities.map((act, key)=>{
-                    dataFinished.push(createData(act.id, act.name, act.expectedStarDate, act.starAt, act.expectedEndDate,
-                        act.endAt, act.allocatedTo, act.description, act.createdAt, act.status?.name))
+                    dataFinished.push(createData(act.id, act.name, act.expectedStarDate, act.expectedEndDate,
+                        act.allocatedTo, act.description, act.createdAt, act.status?.name))
                 })
             }
         })
@@ -305,6 +320,46 @@ export default function ActivitiesTable() {
     console.log("Ficheiroooooooooooooo", uploadedFile)
 
 
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event: Event | React.SyntheticEvent) => {
+        if (
+            anchorRef.current &&
+            anchorRef.current.contains(event.target as HTMLElement)
+        ) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    function handleListKeyDown(event: React.KeyboardEvent) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            setOpen(false);
+        } else if (event.key === 'Escape') {
+            setOpen(false);
+        }
+    }
+
+    // return focus to the button when we transitioned from !open -> open
+    const prevOpen = React.useRef(open);
+    React.useEffect(() => {
+        if (prevOpen.current === true && open === false) {
+            anchorRef.current!.focus();
+        }
+
+        prevOpen.current = open;
+    }, [open]);
+
+
+
+
     const ModalActivities = ()=>{
         return(
             <BootstrapDialog
@@ -342,7 +397,7 @@ export default function ActivitiesTable() {
                                         <option value={"Por fazer"}>Por fazer</option>
                                         <option value={"Em andamento"}>Em andamento</option>
                                         <option value={"Em Revisão"}>Em Revisão</option>
-                                        <option value={"Concluido"}>Concluido</option>
+                                        <option value={"Concluídas"}>Concluídas</option>
                                     </Input>
                                 </FormGroup>}
                             {/*<Dropdown
@@ -391,13 +446,13 @@ export default function ActivitiesTable() {
                             {selectedActivity && displayDate(selectedActivity?.expectedStartDay)}</span>
                         </Row>
                     </Box>
-                    {selectedActivity?.stardDay != "-" &&
+                    {/*{selectedActivity?.stardDay != "-" &&
                         <Box>
                         <Row style={tablesStyles.modalTitle}>
                             Início em: <span style={tablesStyles.modalInfo}>
                             {selectedActivity && displayDate(selectedActivity?.stardDay)}</span>
                         </Row>
-                    </Box>}
+                    </Box>}*/}
 
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
@@ -406,13 +461,13 @@ export default function ActivitiesTable() {
                         </Row>
                     </Box>
 
-                    {selectedActivity?.endDay != "-" &&
+                    {/*{selectedActivity?.endDay != "-" &&
                         <Box>
                         <Row style={tablesStyles.modalTitle}>
                             Fim em: <span style={tablesStyles.modalInfo}>
                             {selectedActivity && displayDate(selectedActivity?.endDay)}</span>
                         </Row>
-                    </Box>}
+                    </Box>}*/}
 
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
@@ -435,8 +490,11 @@ export default function ActivitiesTable() {
                                 <Input type="select" name="selectMulti" id="exampleSelectMulti1" multiple
                                        onChange={handleChangeUser}
                                 >
-                                    <option value={"josemachanguele@gmail.com"}>Jose Machanguele</option>
                                     <option value={"admin@feuem.co.mz"}>Admin FEUEM</option>
+                                    <option value={"josemachanguele@gmail.com"}>Jose Machanguele</option>
+                                    <option value={"admin@feuem.co.mz"}>Jacinta de Sousa</option>
+                                    <option value={"admin@feuem.co.mz"}>Julio Carlos</option>
+                                    <option value={"admin@feuem.co.mz"}>Ana Clara</option>
                                 </Input>
                             </FormGroup>}
                     </Box>
@@ -521,9 +579,14 @@ export default function ActivitiesTable() {
                             <StyledTableCell>#</StyledTableCell>
                             <StyledTableCell sx={{width: '8%'}}>Actividade</StyledTableCell>
                             <StyledTableCell align="left" sx={{width: '12%'}}>Inicio Planeado</StyledTableCell>
+{/*
                             <StyledTableCell align="left">Inicio</StyledTableCell>
+*/}
                             <StyledTableCell align="left">Fim Planeado</StyledTableCell>
+{/*
                             <StyledTableCell align="left">Fim</StyledTableCell>
+*/}
+                            <StyledTableCell align="left">Estado</StyledTableCell>
                             <StyledTableCell align="left">Alocado</StyledTableCell>
                             <StyledTableCell align="left">Ver</StyledTableCell>
                         </TableRow>
@@ -541,10 +604,82 @@ export default function ActivitiesTable() {
                                     {row.activity}
                                 </StyledTableCell>
                                 <StyledTableCell align="left" sx={{width: '12%'}}>{new Date(row.expectedStartDay).toLocaleDateString("pt-PT")}</StyledTableCell>
+{/*
                                 <StyledTableCell align="left">{row.stardDay != "-"? new Date(row.stardDay).toLocaleDateString("pt-PT"): row.stardDay}</StyledTableCell>
+*/}
                                 <StyledTableCell align="left">{new Date(row.expectedEndDay).toLocaleDateString("pt-PT")}</StyledTableCell>
+{/*
                                 <StyledTableCell align="left">{row.endDay != "-"? new Date(row.endDay).toLocaleDateString("pt-PT"): row.endDay}</StyledTableCell>
-                                <StyledTableCell align="left">{row.allocatedTo}</StyledTableCell>
+*/}
+                                <StyledTableCell align="left">
+                                    <Row>
+                                        <span style={{marginTop: '3.5%'}}>{row.status}</span>
+
+
+                                        {/*<Stack direction="row" spacing={2}>
+                                            <div>
+                                                <IconButton
+                                                    color="success"
+                                                    ref={anchorRef}
+                                                    id="composition-button"
+                                                    aria-controls={open ? 'composition-menu' : undefined}
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    aria-haspopup="true"
+                                                    onClick={handleToggle}
+                                                >
+                                                        <EditIcon fontSize={"small"}/>
+                                                </IconButton>
+                                                <Popper
+                                                    open={true}
+                                                    anchorEl={anchorRef.current}
+                                                    role={undefined}
+                                                    placement="bottom-start"
+                                                    transition
+                                                    disablePortal
+                                                >
+                                                    {({ TransitionProps, placement }) => (
+                                                        <Grow
+                                                            {...TransitionProps}
+                                                            style={{
+                                                                transformOrigin:
+                                                                    placement === 'bottom-start' ? 'left top' : 'left bottom',
+                                                            }}
+                                                        >
+                                                            <Paper>
+                                                                <ClickAwayListener onClickAway={handleClose}>
+                                                                    <MenuList
+                                                                        autoFocusItem={open}
+                                                                        id="composition-menu"
+                                                                        aria-labelledby="composition-button"
+                                                                        onKeyDown={handleListKeyDown}
+                                                                    >
+                                                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                                                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                                                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                                                    </MenuList>
+                                                                </ClickAwayListener>
+                                                            </Paper>
+                                                        </Grow>
+                                                    )}
+                                                </Popper>
+                                            </div>
+                                        </Stack>*/}
+
+
+                                        <IconButton color="success">
+                                            <EditIcon fontSize={"small"}/>
+                                        </IconButton>
+                                    </Row>
+                                </StyledTableCell>
+
+                                <StyledTableCell align="left">
+                                    <Row>
+                                        <span style={{marginTop: '3.5%'}}>{row.allocatedTo}</span>
+                                        <IconButton color="success">
+                                            <EditIcon fontSize={"small"}/>
+                                        </IconButton>
+                                    </Row>
+                                </StyledTableCell>
                                 <StyledTableCell align="left">
                                     <IconButton aria-label="fingerprint" color="success">
                                         <BuildIcon

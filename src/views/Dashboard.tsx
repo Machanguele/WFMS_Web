@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useEffect} from "react";
 // reactstrap components
 import {
   Card,
@@ -45,6 +45,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import ActivitiesTable from "../components/ActivitiesTable";
 import {GanttComponentAct} from "../components/Gantt";
 import TabContext from "@mui/lab/TabContext";
+import {useTypeSelector} from "../hooks/useTypeSelector";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router";
+import {componentAction} from "../store/actionCreators/component.actionCreator";
+import {activitySumAction} from "../store/actionCreators/activity.actionCreator";
 // core components
 
 ChartJS.register(
@@ -95,6 +100,21 @@ function Dashboard() {
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
+    };
+
+    const {countActivities, isLoading } = useTypeSelector(
+        (state) => state.activity
+    );
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    useEffect(()=>{
+        dispatch(activitySumAction())
+    }, [])
+
+    const componentHandler = () => {
+        dispatch(componentAction());
     };
 
     const sumActivities: SummaryActivities[]=[
@@ -168,7 +188,7 @@ function Dashboard() {
     <>
       <div className="content">
         <Row>
-          {sumActivities.map((item, id)=>
+          {countActivities?.map((item, id)=>
               <Col lg="3" md="6" sm="6" key={id + 1}>
                 <Card className="card-stats" style={{ borderLeft: `7px solid ${item.color}`, ...cStyles.cardStyle}}>
                   <CardBody key={id + 1}>

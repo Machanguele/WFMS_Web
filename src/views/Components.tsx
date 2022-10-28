@@ -32,7 +32,7 @@ import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {
     addComponentAction,
-    componentAction,
+    componentAction, ganttomponentsAction,
     setSelectedComponentAction
 } from "../store/actionCreators/component.actionCreator";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -50,13 +50,19 @@ import {
 } from "reactstrap";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import IconButton from "@mui/material/IconButton";
+import TabContext from "@mui/lab/TabContext";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import {TabPanel} from "@mui/lab";
+import {IComponent} from "../models/component";
+import SettingsIcon from '@mui/icons-material/Settings';
 // core components
 
 
 const cardStyles = {
   detailsButton: {
     borderRadius: 5,
-    marginLeft: '55%',
+    marginLeft: '45%',
   },
   detailTitle:{
     fontSize: 13,
@@ -82,7 +88,7 @@ const cardStyles = {
       justifyContent: 'flexStart',
       backgroundColor: "rgba(255, 255, 200, .8)",
       borderLeftWidth: 8,
-      borderLeft: '5px solid #F39C12',
+      // borderLeft: '5px solid #F39C12',
   },
   cardDetails:{
       display: 'flex',
@@ -121,11 +127,16 @@ function Component() {
   const [addComponent, setAddComponent] = useState(false);
 
 
-  const {components, isLoading, errorMessage, componentId } = useTypeSelector(
+  const {components, isLoading, errorMessage, componentId, gantComponents } = useTypeSelector(
       (state) => state.component
   );
+    const [value, setValue] = React.useState('one');
 
-  const dispatch = useDispatch();
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
+
+    const dispatch = useDispatch();
   const history = useHistory();
 
   const componentHandler = () => {
@@ -145,38 +156,97 @@ function Component() {
     componentHandler()
   }, [])
 
-    console.log("SelectedCompont", componentId)
 
   const onClickDetails = (component: number)=>{
       dispatch(setSelectedComponentAction(component))
       history.push(`/admin/actividades/${component}`)
 
   }
+
+  const ComponentBoard =()=>{
+      let auxiliarList: IComponent[];
+      if(value==="one")
+          auxiliarList = components.filter(x=>x.activities.length == 0 && x.finished == false)
+      else if(value==="two")
+          auxiliarList = components.filter(x=>x.finished == false && x.activities.length != 0)
+      else
+          auxiliarList =components.filter(x=>x.finished)
+
+      return(
+          <Row>
+              {auxiliarList?.map((item, id) => {
+                  return <Col lg="3" md="6" sm="6" key={id}>
+                      <Card className="card-stats"
+                            style={{borderLeft: value=="one"?'5px solid #F39C12':
+                                    value=="two"? '5px solid #5DADE2': '5px solid #27AE60',
+                                ...cardStyles.cardStyle}}>
+                          <CardBody>
+                              <Row>
+                                  <Col md="11" xs="7">
+                                      <div className="numbers">
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Componente:</span>
+                                              <span style={cardStyles.detailValue}>{item.title}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Criado em:</span>
+                                              <span style={cardStyles.detailValue}>{item.createdAt}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
+                                              <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Iniciada em:</span>
+                                              <span
+                                                  style={cardStyles.detailValue}>{item.startedDate ? item.startedDate : "Não iniciado"}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
+                                              <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Concluido em:</span>
+                                              <span
+                                                  style={cardStyles.detailValue}>{item.actualEndDate ? item.actualEndDate : "Não concluído"}</span>
+                                          </p>
+                                          <p className="card-category">
+                                              <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
+                                              <span
+                                                  style={cardStyles.detailValue}>{item.activities?.length + " / " + item.finishedActivities}</span>
+                                          </p>
+                                      </div>
+                                  </Col>
+                              </Row>
+                          </CardBody>
+                          <CardFooter>
+                              <hr/>
+                              <div className="stats">
+                                  <Box style={cardStyles.detailsButton}>
+                                      <Row>
+                                          <Box sx={{marginTop: '4%'}}>
+                                              <a href='##' onClick={() => onClickDetails(item.id)}>
+                                                  ver Actividades
+                                              </a>
+                                          </Box>
+                                          <IconButton color="warning" component="label">
+                                              <SettingsIcon fontSize={"small"} />
+                                          </IconButton>
+                                      </Row>
+
+                                  </Box>
+                              </div>
+                          </CardFooter>
+                      </Card>
+                  </Col>
+              })}
+          </Row>
+      )
+  }
   return (
-    <>
       <div className="content">
           <Box sx={{backgroundColor: '#FFFFFF', width: '100%', margin: 'auto', marginTop: '1%', borderRadius: 4, borderLeftWidth: 8,
-              borderLeft: addComponent?'8px solid #F39C12': 'none'}}>
-              <Box>
-                  <Box sx={{marginLeft: '1%'}}>
-                      {!addComponent && <Button
-
-                          color="success" link onClick={() => setAddComponent(true)}
-                          style={{borderRadius: 7}}
-                      >
-                          <span style={{color: '#FFFFFF'}}>Adicionar componente</span>
-                          <AddCircleIcon fontSize={'small'}/>
-                      </Button>}
-
-                      {addComponent &&
-                          <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                              <IconButton color="warning" aria-label="upload picture" component="label" onClick={() => setAddComponent(false)}>
-                                  <CloseIcon fontSize={"large"}/>
-                              </IconButton>
-                          </Box>
-                      }
-                  </Box>
-              </Box>
+              borderLeft: addComponent?'8px solid #F39C12': 'none', paddingTop: '2%'}}>
 
               {addComponent &&
                       <Box sx={{width: '100%', padding: '2%', marginTop: '1%', borderRadius: 1, display: 'flex',
@@ -232,7 +302,8 @@ function Component() {
                                           </Row>
                                       </Box>
 
-                                  {addComponent && <Box sx={{display: 'flex', justifyContent: 'center', marginTop: '1%'}}>
+                                  {
+                                      addComponent && <Box sx={{display: 'flex', justifyContent: 'center', marginTop: '1%'}}>
                                       <Row>
                                           <IconButton color="warning" component="label">
                                               <InfoIcon fontSize={"large"}/>
@@ -241,10 +312,18 @@ function Component() {
                                           <p style={cardStyles.infoLabels}>Informe os campos abaixo. A posterior, pode criar as actividades
                                               para este componente, de modo a seguir o workflow</p>
                                       </Row>
-                                  </Box>}
-
+                                  </Box>
+                                  }
 
                                   <Box sx={{display: 'flex', justifyContent: 'center'}}>
+
+                                      {addComponent &&
+                                          <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                                              <IconButton color="warning" aria-label="upload picture" component="label" onClick={() => setAddComponent(false)}>
+                                                  <CloseIcon fontSize={"large"}/>
+                                              </IconButton>
+                                          </Box>
+                                      }
                                       <Button
                                           style={{borderRadius: 5}}
                                           color="success" link onClick={handleCreateComponent}>
@@ -256,76 +335,65 @@ function Component() {
                       </Box>
               }
 
+              {!addComponent &&
+                  <TabContext value={value}>
+                      <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
+                          <Tabs
+                              TabIndicatorProps={{
+                                  style: {
+                                      backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
+                                      borderWidth: 4,
+                                  }
+                              }}
+                              value={value}
+                              onChange={handleChange}
+                              textColor="primary"
+                              indicatorColor="primary"
+                              aria-label="secondary tabs example"
+                              centered={true}
+                          >
+                              <Tab value="one" label="Sem actividades" style={{color: '#167415',
+                                  textTransform: 'none'}} />
 
-              {!addComponent && <Row>
-                  {components.map((item, id) => {
-                      return <Col lg="3" md="6" sm="6" key={id}>
-                          <Card className="card-stats" style={cardStyles.cardStyle}>
-                              <CardBody>
-                                  <Row>
-                                      <Col md="11" xs="7">
-                                          <div className="numbers">
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Componente:</span>
-                                                  <span style={cardStyles.detailValue}>{item.title}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Criado em:</span>
-                                                  <span style={cardStyles.detailValue}>{item.createdAt}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Data de inicio planeado:</span>
-                                                  <span style={cardStyles.detailValue}>{item.expectedStartDate}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Iniciada em:</span>
-                                                  <span
-                                                      style={cardStyles.detailValue}>{item.startedDate ? item.startedDate : "Não iniciado"}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Data de termino planeada:</span>
-                                                  <span style={cardStyles.detailValue}>{item.expectedEndDate}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Concluido em:</span>
-                                                  <span
-                                                      style={cardStyles.detailValue}>{item.actualEndDate ? item.actualEndDate : "Não concluído"}</span>
-                                              </p>
-                                              <p className="card-category">
-                                                  <span style={cardStyles.detailTitle}>Itens Planeados/concluidos:</span>
-                                                  <span
-                                                      style={cardStyles.detailValue}>{item.activities?.length + " / " + item.finishedActivities}</span>
-                                              </p>
-                                          </div>
-                                      </Col>
-                                  </Row>
-                              </CardBody>
-                              <CardFooter>
-                                  <hr/>
-                                  <div className="stats">
-                                      <div style={cardStyles.detailsButton}>
-                                          <a href='##' onClick={() => onClickDetails(item.id)}>
-                                              ver Actividades
-                                              {/*
-                              <RemoveRedEyeOutlinedIcon className={"warning-color"} />
-*/}
-                                          </a>
-                                      </div>
+                              <Tab
+                                  value="two"
+                                  label="Em Execução"
+                                  style={{color: '#167415',  textTransform: 'none'}}
+                              />
+                              <Tab value="three" label="Concluídos" style={{color: '#167415', textTransform: 'none'}} />
 
+                          </Tabs>
+                      </Box>
 
-                                      {/*
-                  <i className="fas fa-sync-alt" /> Update Now
-*/}
-                                  </div>
-                              </CardFooter>
-                          </Card>
-                      </Col>
-                  })}
-              </Row>}
+                      <TabPanel value={"one"}>
+                          <Box>
+                              <Box>
+                                  {!addComponent && <Button
+
+                                      color="success" link onClick={() => setAddComponent(true)}
+                                      style={{borderRadius: 7}}
+                                  >
+                                      <span style={{color: '#FFFFFF'}}>Adicionar componente</span>
+                                      <AddCircleIcon fontSize={'small'}/>
+                                  </Button>}
+                              </Box>
+                              <ComponentBoard />
+                          </Box>
+
+                      </TabPanel>
+                      <TabPanel value="two">
+                              <ComponentBoard />
+
+                      </TabPanel>
+                      <TabPanel value="three">
+                          <ComponentBoard />
+                      </TabPanel>
+
+                  </TabContext>
+              }
+
           </Box>
       </div>
-
-    </>
   );
 }
 

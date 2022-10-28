@@ -1,5 +1,6 @@
 import {IError} from "../../models/error";
 import {IActivity, IGanttActivity} from "../../models/activity";
+import {ISumActivities} from "../../models/ISumActivities";
 
 export enum ActivityActionTypes {
     ACTIVITY_LOADING = "ACTIVITY_LOADING",
@@ -16,7 +17,10 @@ export enum ActivityActionTypes {
     ACTIVITY_GANTT_FAIL = "ACTIVITY_GANTT_FAIL",
     UPLOAD_ACTIVITIES = "UPLOAD_ACTIVITIES",
     UPLOAD_ACTIVITIES_SUCCESS = "UPLOAD_ACTIVITIES_SUCCESS",
-    UPLOAD_ACTIVITIES_FAIL = "UPLOAD_ACTIVITIES_FAIL"
+    UPLOAD_ACTIVITIES_FAIL = "UPLOAD_ACTIVITIES_FAIL",
+    LOAD_SUM_ACTIVITIES = "LOAD_SUM_ACTIVITIES",
+    LOAD_SUM_ACTIVITIES_SUCCESS = "LOAD_SUM_ACTIVITIES_SUCCESS",
+    LOAD_SUM_ACTIVITIES_FAIL = "LOAD_SUM_ACTIVITIES_FAIL"
 
 }
 
@@ -90,10 +94,25 @@ interface IUploadActivitiesFail {
     payload: {error: IError}
 }
 
+interface ISumActivity {
+    type: ActivityActionTypes.LOAD_SUM_ACTIVITIES
+}
+
+interface ISumActivitiesSuccess {
+    type: ActivityActionTypes.LOAD_SUM_ACTIVITIES_SUCCESS,
+    payload: ISumActivities[]
+}
+
+interface ISumActivitiesFail {
+    type: ActivityActionTypes.LOAD_SUM_ACTIVITIES_FAIL,
+    payload: {error: IError}
+}
+
 
 
 export type ActivityAction =
     IActivityLoading | IActivityFail | IActivitySuccess | IActivitySatusLoading |
     IActivitySatusSuccess |IActivitySatusFail | IActivityAllocateLoading | IActivityAllocateSuccess|
     IActivityAllocateFail| IActivitygGanttLoading | IActivityGanttSuccess| IActivityGanttFail|
-    IUploadActivities| IUploadActivitiesSuccess| IUploadActivitiesFail
+    IUploadActivities| IUploadActivitiesSuccess| IUploadActivitiesFail| ISumActivity| ISumActivitiesSuccess|
+    ISumActivitiesFail

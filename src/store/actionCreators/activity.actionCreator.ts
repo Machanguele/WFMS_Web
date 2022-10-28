@@ -3,6 +3,7 @@ import {Api} from "../../services/api";
 import {ActivityAction, ActivityActionTypes} from "../actionTypes/activityTypes";
 import {IActivity, IGanttActivity} from "../../models/activity";
 import axios from "axios";
+import {ISumActivities} from "../../models/ISumActivities";
 
 export const activityAction = (componentId: number) =>
     async (dispatch: Dispatch<ActivityAction>) => {
@@ -39,6 +40,45 @@ export const activityAction = (componentId: number) =>
         })
     }
     }
+
+
+export const activitySumAction = () =>
+    async (dispatch: Dispatch<ActivityAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ActivityActionTypes.ACTIVITY_LOADING
+            });
+
+            await api.get<ISumActivities[]>(`activities/count`, {})
+                .then(response => {
+
+                    console.log("dados de retorno")
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ActivityActionTypes.LOAD_SUM_ACTIVITIES_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ActivityActionTypes.LOAD_SUM_ACTIVITIES_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ActivityActionTypes.LOAD_SUM_ACTIVITIES_FAIL,
+                payload: e
+            })
+        }
+    }
+
+
 
 export const uploadActivityAction = (data: FormData) =>
 

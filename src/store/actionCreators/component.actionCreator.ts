@@ -2,6 +2,7 @@ import {Dispatch} from "redux";
 import {Api} from "../../services/api";
 import {ComponentAction, ComponentActionTypes} from "../actionTypes/component.actionTypes";
 import {IComponent} from "../../models/component";
+import {IActivity, IGanttActivity} from "../../models/activity";
 
 export const componentAction = () =>
     async (dispatch: Dispatch<ComponentAction>) => {
@@ -33,6 +34,39 @@ export const componentAction = () =>
             payload: e
         })
     }
+    }
+
+
+export const ganttomponentsAction = () =>
+    async (dispatch: Dispatch<ComponentAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ComponentActionTypes.COMPONENT_GANTT_LOADING
+            });
+
+            await api.get<IGanttActivity[]>("Components/gantt", {})
+                .then(response => {
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ComponentActionTypes.COMPONENT_GANTT_LOADING_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ComponentActionTypes.COMPONENT_GANTT_LOADING_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ComponentActionTypes.COMPONENT_GANTT_LOADING_FAIL,
+                payload: e
+            })
+        }
     }
 
 export const addComponentAction = (title: string, departmentId: number,

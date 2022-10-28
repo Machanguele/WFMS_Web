@@ -1,5 +1,6 @@
 import {IError} from "../../models/error";
 import {IComponent} from "../../models/component";
+import {IGanttActivity} from "../../models/activity";
 
 export enum ComponentActionTypes {
     COMPONENT_LOADING = "COMPONENT_LOADING",
@@ -11,6 +12,9 @@ export enum ComponentActionTypes {
     SET_COMPONENT_LOADING = "SET_COMPONENT_LOADING",
     SET_COMPONENT_LOADING_SUCCESS = "SET_COMPONENT_LOADING_SUCCESS",
     SET_COMPONENT_LOADING_FAIL = "SET_COMPONENT_LOADING_FAIL",
+    COMPONENT_GANTT_LOADING = "COMPONENT_GANTT_LOADING",
+    COMPONENT_GANTT_LOADING_SUCCESS = "COMPONENT_GANTT_LOADING_SUCCESS",
+    COMPONENT_GANTT_LOADING_FAIL = "COMPONENT_GANTT_LOADING_FAIL"
 }
 
 interface IComponentLoading {
@@ -56,6 +60,22 @@ interface ISetComponentFail {
 }
 
 
+interface IGetGanttComponent {
+    type: ComponentActionTypes.COMPONENT_GANTT_LOADING
+}
+
+interface IGetGanttComponentSuccess {
+    type: ComponentActionTypes.COMPONENT_GANTT_LOADING_SUCCESS,
+    payload: IGanttActivity[]
+}
+
+interface IGetGanttComponentFail {
+    type: ComponentActionTypes.COMPONENT_GANTT_LOADING_FAIL,
+    payload: {error: IError}
+}
+
+
 export type ComponentAction =
     IComponentLoading | IComponentFail | IComponentSuccess | IAddComponentLoading| IAddComponentSuccess|
-    IAddComponentFail| ISetComponentLoading| ISetComponentSuccess | ISetComponentFail
+    IAddComponentFail| ISetComponentLoading| ISetComponentSuccess | ISetComponentFail | IGetGanttComponent|
+    IGetGanttComponentSuccess |IGetGanttComponentFail
