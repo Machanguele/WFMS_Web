@@ -4,7 +4,7 @@ import {ComponentAction, ComponentActionTypes} from "../actionTypes/component.ac
 import {IComponent} from "../../models/component";
 import {IActivity, IGanttActivity} from "../../models/activity";
 
-export const componentAction = () =>
+export const componentAction = (email: string, role: string) =>
     async (dispatch: Dispatch<ComponentAction>) => {
     let api = new Api();
 
@@ -13,7 +13,7 @@ export const componentAction = () =>
             type: ComponentActionTypes.COMPONENT_LOADING
         });
 
-        await api.get<IComponent[]>("Components", {})
+        await api.get<IComponent[]>("Components", {email, role})
             .then(response => {
                 if (response.status === 200) {
                     dispatch({

@@ -4,12 +4,12 @@ import Dashboard from "../src/views/Dashboard";
 import Notifications from "../src/views/Notifications";
 import Icons from "../src/views/Icons";
 import Typography from "../src/views/Typography";
-import TableList from "../src/views/Tables";
-import UserPage from "../src/views/User";
 import {Kanban} from "./views/Kanban";
 import Departament from "./views/Departament";
 import Component from "./views/Components";
 import Estatistica from "./views/Estatisticas";
+import UsersComponent from "./views/Users";
+import {Configurations} from "./views/Configurations";
 
 const routes = [
 	{
@@ -19,6 +19,8 @@ const routes = [
 		component: Login,
 		layout: "/auth",
 		invisible: true,
+		roles: ''
+
 	},
 	{
 		path: "/recover",
@@ -27,6 +29,8 @@ const routes = [
 		component: Recover,
 		layout: "/auth",
 		invisible: true,
+		roles: ''
+
 	},
 	{
 		path: "/dashboard",
@@ -35,6 +39,7 @@ const routes = [
 		component: Dashboard,
 		layout: "/admin",
 		invisible: false,
+		roles: 'Director, Gestor de actividades, TI de Suporte, Operador Transacional'
 	},
 	{
 		path: "/componentes",
@@ -43,6 +48,7 @@ const routes = [
 		component: Component,
 		layout: "/admin",
 		invisible: false,
+		roles: 'Director, Gestor de actividades, Operador Transacional'
 	},
 
 	{
@@ -52,6 +58,7 @@ const routes = [
 		component: Kanban,
 		layout: "/admin",
 		invisible: true,
+		roles: ''
 	},
 	{
 		path: "/relatorios",
@@ -60,6 +67,8 @@ const routes = [
 		component: Estatistica,
 		layout: "/admin",
 		invisible: false,
+		roles: 'Director, Gestor de actividades',
+
 	},
 	{
 		path: "/icons",
@@ -68,6 +77,7 @@ const routes = [
 		component: Icons,
 		layout: "/admin2",
 		invisible: true,
+		roles:''
 	},
 
 
@@ -78,15 +88,17 @@ const routes = [
 		component: Departament,
 		layout: "/admin",
 		invisible: true,
+		roles:''
 	},
 
 {
 		path: "/Configuracoes",
 		name: "Configurações",
 		icon: "nc-icon nc-settings-gear-65",
-		component: Departament,
+		component: Configurations,
 		layout: "/admin",
 		invisible: false,
+		roles: 'TI de Suporte| Director'
 	},
 
 	{
@@ -96,6 +108,7 @@ const routes = [
 		component: Notifications,
 		layout: "/admin",
 		invisible: true,
+		roles:''
 	},
 	{
 		path: "/user-page",
@@ -103,7 +116,17 @@ const routes = [
 		icon: "nc-icon nc-single-02",
 		component: Departament,
 		layout: "/admin",
-		invisible: false,
+		invisible: true,
+		roles:''
+	},
+	{
+		path: "/users",
+		name: "Utilizadores",
+		icon: "nc-icon nc-single-02",
+		component: UsersComponent,
+		layout: "/admin",
+		invisible: true,
+		roles:''
 	},
 /*	{
 		path: "/user-page",
@@ -121,6 +144,7 @@ const routes = [
 		component: Typography,
 		layout: "/admin2",
 		invisible: true,
+		roles:''
 	}
 ];
 export default routes;

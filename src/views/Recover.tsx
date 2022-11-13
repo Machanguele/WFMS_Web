@@ -24,7 +24,7 @@ const Login = () => {
 	const [email, setEmail] = useState("");
 	const [loginData, setLoginData] = useState<ILogin>();
 	const { login, isLoading, errorMessage } = useTypeSelector(
-		(state) => state.login
+		(state) => state.loginInfo
 	);
 
 	const dispatch = useDispatch();
@@ -74,7 +74,7 @@ const Login = () => {
 												</InputGroupText>
 											</InputGroupAddon>
 											<Input
-												placeholder="Email"
+												placeholder="Insira o Email de recuperação"
 												type="email"
 												autoComplete="new-email"
 												value={email}
@@ -92,7 +92,7 @@ const Login = () => {
 											type="button"
 											onClick={loginHandler}
 										>
-											Send
+											Enviar
 										</Button>
 									</div>
 								</Form>

@@ -38,9 +38,9 @@ function Sidebar({ props, routes }: ISideBarProps) {
 			className="sidebar "
 			data-color="success"
 			data-active-color="success"
-			style={{ backgroundColor: "#6bd098" }}
+			style={{ backgroundColor: "#167415" }}
 		>
-			<div className="logo" style={{ backgroundColor: "#6bd098" }}>
+			<div className="logo" style={{ backgroundColor: "#167415" }}>
 				<a
 					href="http://www.engenharia.uem.mz/"
 					className="simple-text  ml-5"
@@ -53,7 +53,7 @@ function Sidebar({ props, routes }: ISideBarProps) {
 			<div
 				className="sidebar-wrapper"
 				ref={sidebar}
-				style={{ backgroundColor: "#6bd098" }}
+				style={{ backgroundColor: "#167415" }}
 			>
 				<Nav style={{ height: "100%"}}>
 					{routes.map((prop, key) => {

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {useEffect} from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Collapse,
@@ -20,6 +20,11 @@ import {
 } from "reactstrap";
 import {ExtractRouteParams, RouteComponentProps} from "react-router";
 import routes from "../../routes";
+import {useTypeSelector} from "../../hooks/useTypeSelector";
+import {useDispatch} from "react-redux";
+import {useHistory} from "react-router";
+import {logoutAction} from "../../store/actionCreators/login.actionCreator";
+import {IUser} from "../../models/user";
 
 interface IHeaderProps {
   props: RouteComponentProps<ExtractRouteParams<string,string>>,
@@ -80,6 +85,27 @@ function Header({props} : IHeaderProps) {
       }
     }
   }, [location]);
+
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {login, userLogged, isLoading, userArchived, userCreated} = useTypeSelector(
+      (state) => state.loginInfo
+  );
+  const [user, setUser] = React.useState<IUser>({} as IUser);
+  useEffect(()=>{
+    let aux = localStorage.getItem('user')
+    if(aux != null)
+      setUser(JSON.parse(aux));
+
+  }, [])
+
+  const logoutHandler =()=>{
+    console.log("Fazendo o Logout")
+    dispatch(logoutAction())
+    history.push(`/auth/login`)
+  }
+
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     <Navbar
@@ -118,7 +144,7 @@ function Header({props} : IHeaderProps) {
           <span className="navbar-toggler-bar navbar-kebab" />
         </NavbarToggler>
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
-          <form>
+          {/*<form>
             <InputGroup className="no-border">
               <Input placeholder="Search..." />
               <InputGroupAddon addonType="append">
@@ -127,15 +153,18 @@ function Header({props} : IHeaderProps) {
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
-          </form>
+          </form>*/}
           <Nav navbar>
-            <NavItem>
+            {/*<NavItem>
               <Link to="#pablo" className="nav-link btn-magnify">
                 <i className="nc-icon nc-layout-11" />
                 <p>
                   <span className="d-lg-none d-md-block">Stats</span>
                 </p>
               </Link>
+            </NavItem>*/}
+            <NavItem style={{fontSize: '10pt', color: 'green', fontFamily: 'sans-serif', marginTop: '5%'}}>
+              <p>{user.email}</p>
             </NavItem>
             <Dropdown
               nav
@@ -144,25 +173,25 @@ function Header({props} : IHeaderProps) {
 
             >
               <DropdownToggle caret nav>
-                <i className="nc-icon nc-bell-55" />
+                {/*<i className="nc-icon nc-single-02" />*/}
                 <p>
                   <span className="d-lg-none d-md-block">Some Actions</span>
                 </p>
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem tag="a">Action</DropdownItem>
-                <DropdownItem tag="a">Another Action</DropdownItem>
-                <DropdownItem tag="a">Something else here</DropdownItem>
+                <DropdownItem tag="a" onClick={logoutHandler}>Sair</DropdownItem>
+                <DropdownItem tag="a">Meu Perfil</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <NavItem>
+
+            {/*<NavItem>
               <Link to="#pablo" className="nav-link btn-rotate">
                 <i className="nc-icon nc-settings-gear-65" />
                 <p>
                   <span className="d-lg-none d-md-block">Account</span>
                 </p>
               </Link>
-            </NavItem>
+            </NavItem>*/}
           </Nav>
         </Collapse>
       </Container>

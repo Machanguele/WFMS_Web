@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import { Nav } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
@@ -9,6 +9,7 @@ import {ExtractRouteParams, RouteComponentProps} from "react-router";
 import {IRoute} from "../../Interfaces/IRoutes";
 import SchemaIcon from '@mui/icons-material/Schema';
 import logo from '../../assets/img/logo.png'
+import {IUser} from "../../models/user";
 
 var ps : any;
 
@@ -36,6 +37,15 @@ function Sidebar({props, routes} : ISideBarProps) {
       }
     };
   });
+
+    const [user, setUser] = React.useState<IUser>({} as IUser);
+    useEffect(()=>{
+        let aux = localStorage.getItem('user')
+        if(aux != null)
+            setUser(JSON.parse(aux));
+
+    }, [])
+
   return (
 		<div className="sidebar" data-color="green" data-active-color="white">
 			<div className="logo">
@@ -44,14 +54,16 @@ function Sidebar({props, routes} : ISideBarProps) {
 					className="simple-text logo-normal"
 					target="_blank" rel="noreferrer"
 				>
+{/*
                         <SchemaIcon htmlColor={'#FFCB21'} fontSize={'large'}/>
+*/}
                         <img src={logo} color={'white'} width={'50%'} className={"logoName"}/>
 				</a>
 			</div>
 			<div className="sidebar-wrapper" ref={sidebar}>
 				<Nav>
 					{routes.map((prop, key) => {
-						if (prop.layout === "/admin" && !prop.invisible) {
+						if (prop.layout === "/admin" && !prop.invisible && prop.roles.includes(user.role)) {
 							return (
 								<li className={activeRoute(prop.path)} key={key}>
 									<NavLink
