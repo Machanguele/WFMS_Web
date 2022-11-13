@@ -129,6 +129,7 @@ function Component() {
     const [addComponent, setAddComponent] = useState(false);
 
 
+
     const {components, isLoading, errorMessage, componentId, gantComponents } = useTypeSelector(
         (state) => state.component
     );
@@ -141,6 +142,8 @@ function Component() {
 
 
     }, [])
+
+
 
     const [value, setValue] = React.useState(user.role == 'Gestor de actividades' || user.role === 'Director'?'one': 'two');
 

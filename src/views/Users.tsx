@@ -37,7 +37,7 @@ import {
     DropDownTree,
 } from "@progress/kendo-react-dropdowns";
 import { Checkbox } from "@progress/kendo-react-inputs";
-import {Alert, CircularProgress} from "@mui/material";
+import {Alert, CircularProgress, List} from "@mui/material";
 import Stack from "@mui/material/Stack";
 
 const roles =[
@@ -241,57 +241,61 @@ function UsersComponent() {
                        </Box>
                        {
                            !addUser &&
-                           <TableContainer component={Paper} sx={{marginLeft: '-2%'}}>
-                               <Table sx={{ minWidth: 650, marginLeft: 0, width: '100%' }} aria-label="simple table">
-                                   <TableHead>
-                                       <TableRow>
-                                           <TableCell>#</TableCell>
-                                           <TableCell sx={{width: '8%'}}>Nome</TableCell>
-                                           <TableCell align="left" sx={{width: '12%'}}>Email</TableCell>
-                                           <TableCell align="left">Função</TableCell>
-                                           <TableCell align="left">Departamento</TableCell>
-                                           <TableCell align="left">Arquivado</TableCell>
-                                           <TableCell align="left">Acção</TableCell>
-                                       </TableRow>
-                                   </TableHead>
-                                   <TableBody>
-                                       {data.map((row, index) => (
-                                           <StyledTableRow
-                                               key={index+1}
-                                               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                           >
-                                               <TableCell component="th" scope="row">
-                                                   {index+1}
-                                               </TableCell>
-                                               <TableCell component="th" scope="row" sx={{width: '18%'}}>
-                                                   {row.fullName}
-                                               </TableCell>
-                                               <TableCell align="left" sx={{width: '10%'}}>{row.email}</TableCell>
+                           <Paper style={{maxHeight: 500, overflow: 'auto'}}>
+                               <List>
+                                   <TableContainer component={Paper} sx={{marginLeft: '0%'}}>
+                                       <Table sx={{ minWidth: 650, marginLeft: 0, width: '100%' }} aria-label="simple table">
+                                           <TableHead>
+                                               <TableRow>
+                                                   <TableCell>#</TableCell>
+                                                   <TableCell sx={{width: '8%'}}>Nome</TableCell>
+                                                   <TableCell align="left" sx={{width: '12%'}}>Email</TableCell>
+                                                   <TableCell align="left">Função</TableCell>
+                                                   <TableCell align="left">Departamento</TableCell>
+                                                   <TableCell align="left">Arquivado</TableCell>
+                                                   <TableCell align="left">Acção</TableCell>
+                                               </TableRow>
+                                           </TableHead>
+                                           <TableBody>
+                                               {data.map((row, index) => (
+                                                   <StyledTableRow
+                                                       key={index+1}
+                                                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                   >
+                                                       <TableCell component="th" scope="row">
+                                                           {index+1}
+                                                       </TableCell>
+                                                       <TableCell component="th" scope="row" sx={{width: '18%'}}>
+                                                           {row.fullName}
+                                                       </TableCell>
+                                                       <TableCell align="left" sx={{width: '10%'}}>{row.email}</TableCell>
 
-                                               <TableCell align="left">{row.role}</TableCell>
+                                                       <TableCell align="left">{row.role}</TableCell>
 
-                                               <TableCell align="left">
-                                                   {row.department}
-                                               </TableCell>
-                                               <TableCell align="left">
-                                                   <Checkbox
-                                                       defaultValue={row.archived}
-                                                       onClick={()=>archiveUserHandler(row.email)}
-                                                   />
-                                               </TableCell>
+                                                       <TableCell align="left">
+                                                           {row.department}
+                                                       </TableCell>
+                                                       <TableCell align="left">
+                                                           <Checkbox
+                                                               defaultValue={row.archived}
+                                                               onClick={()=>archiveUserHandler(row.email)}
+                                                           />
+                                                       </TableCell>
 
-                                               <TableCell align="left">
-                                                   <Row>
-                                                       <IconButton color="success">
-                                                           <EditIcon fontSize={"small"}/>
-                                                       </IconButton>
-                                                   </Row>
-                                               </TableCell>
-                                           </StyledTableRow>
-                                       ))}
-                                   </TableBody>
-                               </Table>
-                           </TableContainer>
+                                                       <TableCell align="left">
+                                                           <Row>
+                                                               <IconButton color="success">
+                                                                   <EditIcon fontSize={"small"}/>
+                                                               </IconButton>
+                                                           </Row>
+                                                       </TableCell>
+                                                   </StyledTableRow>
+                                               ))}
+                                           </TableBody>
+                                       </Table>
+                                   </TableContainer>
+                               </List>
+                           </Paper>
                        }
 
                        {addUser

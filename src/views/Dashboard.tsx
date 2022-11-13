@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 // reactstrap components
 import {
   Card,
@@ -97,6 +97,8 @@ function Dashboard() {
 
 
     const [value, setValue] = React.useState('one');
+    const [countPlaned, setCountPlanned] = useState(0);
+    const [countFinished, setCountFinished] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -113,9 +115,31 @@ function Dashboard() {
         dispatch(activitySumAction())
     }, [])
 
-    /*const componentHandler = () => {
-        dispatch(componentAction());
-    };*/
+    useEffect(()=>{
+        if (countActivities != null) {
+            if (countActivities.length > 0) {
+                let finished = 0;
+                let todo = 0;
+                let inProgress = 0;
+                let inReview = 0;
+                countActivities.map((item)=>{
+                    if(item.name === "Concluídas")
+                        finished = item.quantity
+                    if(item.name === "Por fazer")
+                        todo = item.quantity
+                    if(item.name === "Em andamento")
+                        inProgress = item.quantity
+                    if(item.name === "Em Revisão")
+                        inReview = item.quantity
+                })
+                setCountPlanned(finished + todo + inProgress + inReview)
+                setCountFinished(finished)
+            }
+        }
+
+    }, [countActivities])
+
+
 
     const sumActivities: SummaryActivities[]=[
         {name: "Por fazer", quantity: 50, color: '#F39C12'},
@@ -132,14 +156,14 @@ function Dashboard() {
       },
       title: {
         display: true,
-        text: 'Resumo de actividades do 1o. Trimestre',
+        text: 'Resumo de actividades do 2o. Semestre 2022',
       },
     },
   };
 
   const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro (Corrente)'];
-  const data1 =[190, 178, 200, 79, 100]
-  const data2 =[185, 140, 197, 65, 30]
+  const data1 =[190, 178, 200, 79, countPlaned]
+  const data2 =[185, 140, 197, 65, countFinished]
 
     const dataPlaned = {
         labels,
@@ -214,139 +238,10 @@ function Dashboard() {
                   </CardFooter>
                 </Card>
               </Col>)}
-          {/*<Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
 
-                      <i className="nc-icon nc-money-coins text-success" />
-
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Plano do Proximo semestre</p>
-                      <CardTitle tag="p">50/50</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="far fa-calendar" /> Last day
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-
-                      <i className="nc-icon nc-vector text-danger" />
-
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Departamento Social</p>
-                      <CardTitle tag="p">10/11</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="far fa-clock" /> In the last hour
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>
-          <Col lg="3" md="6" sm="6">
-            <Card className="card-stats">
-              <CardBody>
-                <Row>
-                  <Col md="4" xs="5">
-                    <div className="icon-big text-center icon-warning">
-
-                      <i className="nc-icon nc-favourite-28 text-primary" />
-
-                    </div>
-                  </Col>
-                  <Col md="8" xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Eventos</p>
-                      <CardTitle tag="p">5/5</CardTitle>
-                      <p />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              <CardFooter>
-                <hr />
-                <div className="stats">
-
-                  <i className="fas fa-sync-alt" /> Update now
-
-                </div>
-              </CardFooter>
-            </Card>
-          </Col>*/}
         </Row>
 
         <Line options={options} data={data}  height={100} />
-          {/*<TabContext value={value}>
-              <Box sx={{marginLeft: '2%', fontWeight: 'bold' }} >
-                  <Tabs
-                      TabIndicatorProps={{
-                          style: {
-                              backgroundColor: value=='one'?"#F39C12": value=='two'?'#2E86C1':'#8E44AD',
-                              borderWidth: 4,
-                          }
-                      }}
-                      value={value}
-                      onChange={handleChange}
-                      textColor="primary"
-                      indicatorColor="primary"
-                      aria-label="secondary tabs example"
-                      centered={true}
-                  >
-                      <Tab value="two" label="Resumo por linhas" style={{color: '#167415', textTransform: 'none'}} />
-                      <Tab
-                          value="one"
-                          label="Resumo por barras"
-                          style={{color: '#167415',  textTransform: 'none'}}
-                      />
-                      <Tab value="three" label="Fluxo de Execução" style={{color: '#167415', textTransform: 'none'}}/>
-                      <Tab value="four" label="Fluxo de Planeamento" style={{color: '#167415', textTransform: 'none'}}/>
-                  </Tabs>
-              </Box>
-
-              <TabPanel value="one">
-                  <Bar options={options} data={data} />
-              </TabPanel>
-              <TabPanel value="two">
-                  <Line options={options} data={data} />
-              </TabPanel>
-              <TabPanel value="three">
-                  <Bar options={options} data={dataExecution} />
-              </TabPanel>
-              <TabPanel value="four">
-                  <Bar options={options} data={dataPlaned} />
-              </TabPanel>
-          </TabContext>*/}
       </div>
     </>
   );

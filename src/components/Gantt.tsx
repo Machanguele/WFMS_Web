@@ -33,7 +33,7 @@ export  function GanttComponentAct(){
                  dataToReturn.push({
                     type: "task",
                     id: `task${item.id}`,
-                    name: `Actividade ${id+1}`,
+                    name: item.name,
                     start: new Date(item.expectedStarDate),
                     end: new Date(item.expectedEndDate),
                     progress: item.status?.progress,

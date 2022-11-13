@@ -586,13 +586,13 @@ export default function ActivitiesTable() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.map((row) => (
+                                {data.map((row, index) => (
                                     <StyledTableRow
-                                        key={row.id}
+                                        key={row.id+""+index}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <StyledTableCell component="th" scope="row">
-                                            {row.id}
+                                            {index + 1}
                                         </StyledTableCell>
                                         <StyledTableCell component="th" scope="row" sx={{width: '8%'}}>
                                             {row.activity}

@@ -98,7 +98,7 @@ const routes = [
 		component: Configurations,
 		layout: "/admin",
 		invisible: false,
-		roles: 'TI de Suporte| Director'
+		roles: 'TI de Suporte, Director'
 	},
 
 	{
