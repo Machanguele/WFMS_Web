@@ -137,7 +137,7 @@ function Dashboard() {
     },
   };
 
-  const labels = ['Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro (Corrente)'];
+  const labels = ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro (Corrente)'];
   const data1 =[190, 178, 200, 79, 100]
   const data2 =[185, 140, 197, 65, 30]
 

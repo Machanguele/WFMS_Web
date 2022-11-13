@@ -31,7 +31,7 @@ import {useTypeSelector} from "../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {
-    addComponentAction,
+    addComponentAction, closeComponentAction,
     componentAction, ganttomponentsAction,
     setSelectedComponentAction
 } from "../store/actionCreators/component.actionCreator";
@@ -39,6 +39,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import InfoIcon from '@mui/icons-material/Info';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import Box from "@mui/material/Box";
@@ -63,7 +64,7 @@ import {IUser} from "../models/user";
 const cardStyles = {
     detailsButton: {
         borderRadius: 5,
-        marginLeft: '45%',
+        marginLeft: '20%',
     },
     detailTitle:{
         fontSize: 13,
@@ -123,8 +124,8 @@ function Component() {
     const [title, setTitle] = useState("");
     const [departmentId, setDepartmentId] = useState(3);
     const [description, setDescription] = useState("");
-    const [expectedStartDate, setExpectedStartDate] = useState("2022-10-10");
-    const [expectedEndDate, setExpectedEndDate] = useState("2022-10-12");
+    const [expectedStartDate, setExpectedStartDate] = useState("2022-07-01");
+    const [expectedEndDate, setExpectedEndDate] = useState("2022-12-31");
     const [addComponent, setAddComponent] = useState(false);
 
 
@@ -173,6 +174,13 @@ function Component() {
         dispatch(setSelectedComponentAction(component))
         history.push(`/admin/actividades/${component}`)
 
+    }
+
+    const closeActivityHandler =(compId: number)=>{
+        dispatch(closeComponentAction(compId));
+        setTimeout(()=>{
+            componentHandler();
+        }, 1000)
     }
 
 
@@ -244,8 +252,18 @@ function Component() {
                                                 </a>
                                             </Box>
                                             <IconButton color="warning" component="label">
-                                                <SettingsIcon fontSize={"small"} />
+                                                <SettingsIcon fontSize={"small"}/>
                                             </IconButton>
+                                            {value=="two" &&
+                                                <IconButton
+                                                    color="warning"
+                                                    component="label"
+                                            >
+                                                <ArchiveIcon
+                                                    fontSize={"small"}
+                                                    onClick={()=>closeActivityHandler(item.id)}
+                                                />
+                                            </IconButton>}
                                         </Row>
 
                                     </Box>

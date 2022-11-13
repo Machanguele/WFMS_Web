@@ -24,11 +24,6 @@ import {styled} from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import Box from "@mui/material/Box";
 import {Button, FormGroup, FormText, Input, Label} from "reactstrap";
-import {addComponentAction} from "../store/actionCreators/component.actionCreator";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import Typography from "@mui/material/Typography";
-import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import InfoIcon from "@mui/icons-material/Info";
 import CloseIcon from "@mui/icons-material/Close";
@@ -61,36 +56,6 @@ const departments =[
     "DCG"
 ]
 
-
-
-const tablesStyles = {
-    container: {
-        borderRadius: 5,
-        marginTop: '1%',
-    },
-    tabStyle:{
-        color: '#B35B45',
-    },
-    modalContent:{
-        marginLeft: '2%',
-    },
-    modalTitle:{
-        color: '#148F77',
-        height: '2%',
-        fontSize: '12pt',
-        fontFamily: 'sans-serif'
-    },
-    modalInfo:{
-        color: '#A3A6A6',
-        fontSize: '12pt',
-        marginLeft: '1%'
-    },
-    modalInfoWarn:{
-        color: '#E74C3C',
-        fontSize: '12pt',
-        marginLeft: '1%'
-    }
-}
 
 const cardStyles = {
     detailsButton: {
@@ -237,154 +202,6 @@ function UsersComponent() {
             padding: theme.spacing(1),
         },
     }));
-
-   /* const ModalUser = ()=>{
-        return(
-            <BootstrapDialog
-                onClose={()=>setAddUser(false)}
-                aria-labelledby="customized-dialog-title"
-                open={addUser}
-                style={{width: '100%',  margin: 'auto', borderRadius: 10
-
-                }}
-            >
-                <DialogTitle
-                    sx={{color: '#148F77', height: '2%', fontSize: '12pt'}}
-                >
-                    Actividade: {selectedActivity?.activity}
-                </DialogTitle>
-                <DialogContent dividers style={tablesStyles.modalContent}>
-                    <Box style={tablesStyles.modalTitle}>
-                        <Row>Estado:
-                            <span style={tablesStyles.modalInfo}>{selectedActivity?.status}</span>
-                            <IconButton aria-label="fingerprint" color="success">
-                                <EditIcon
-                                    fontSize={"small"}
-                                    color={"warning"}
-                                    onClick={()=>setSaveStatus(true)}
-                                />
-                            </IconButton>
-                        </Row>
-                        {saveStatus &&
-
-                            <FormGroup>
-                                <Label for="exampleSelectMulti1">Estado selecionado: {status}</Label>
-                                <Input type="select" name="selectMulti" id="exampleSelectMulti1" multiple
-                                       onChange={handleChangeStatus}
-                                >
-                                    <option value={"Por fazer"}>Por fazer</option>
-                                    <option value={"Em andamento"}>Em andamento</option>
-                                    <option value={"Em Revisão"}>Em Revisão</option>
-                                    <option value={"Concluídas"}>Concluídas</option>
-                                </Input>
-                            </FormGroup>}
-                    </Box>
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Descrição: <span style={tablesStyles.modalInfo}>
-                            {/!*<TextField
-                                variant="standard"
-                                disabled
-                                id="outlined-disabled"
-                                value={selectedActivity?.description}
-                            />*!/}
-                            {selectedActivity?.description}
-                            </span>
-                        </Row>
-                    </Box>
-
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Criada aos: <span style={tablesStyles.modalInfo}>
-                            {selectedActivity && displayDate(selectedActivity?.createdAt)}</span>
-                        </Row>
-                    </Box>
-
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Estimativa de Início : <span style={tablesStyles.modalInfo}>
-                            {selectedActivity && displayDate(selectedActivity?.expectedStartDay)}</span>
-                        </Row>
-                    </Box>
-                    {/!*{selectedActivity?.stardDay != "-" &&
-                        <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Início em: <span style={tablesStyles.modalInfo}>
-                            {selectedActivity && displayDate(selectedActivity?.stardDay)}</span>
-                        </Row>
-                    </Box>}*!/}
-
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Estimativa de Fim: <span style={tablesStyles.modalInfo}>
-                            {selectedActivity && displayDate(selectedActivity?.expectedEndDay)}</span>
-                        </Row>
-                    </Box>
-
-                    {/!*{selectedActivity?.endDay != "-" &&
-                        <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Fim em: <span style={tablesStyles.modalInfo}>
-                            {selectedActivity && displayDate(selectedActivity?.endDay)}</span>
-                        </Row>
-                    </Box>}*!/}
-
-                    <Box>
-                        <Row style={tablesStyles.modalTitle}>
-                            Alocado: <span style={tablesStyles.modalInfo}>
-                            {selectedActivity?.allocatedTo? selectedActivity.allocatedTo : 'N/A'}
-                        </span>
-                            <IconButton aria-label="fingerprint" color="success">
-                                <EditIcon
-                                    fontSize={"small"}
-                                    color={"warning"}
-                                    onClick={()=>setSaveAllocated(true)}
-                                />
-                            </IconButton>
-                        </Row>
-
-                        {saveAllocated &&
-
-                            <FormGroup>
-                                <Label for="exampleSelectMulti1">Allocar a/ao: </Label>
-                                <Input type="select" name="selectMulti" id="exampleSelectMulti1" multiple
-                                       onChange={handleChangeUser}
-                                >
-                                    <option value={"admin@feuem.co.mz"}>Admin FEUEM</option>
-                                    <option value={"josemachanguele@gmail.com"}>Jose Machanguele</option>
-                                    <option value={"admin@feuem.co.mz"}>Jacinta de Sousa</option>
-                                    <option value={"admin@feuem.co.mz"}>Julio Carlos</option>
-                                    <option value={"admin@feuem.co.mz"}>Ana Clara</option>
-                                </Input>
-                            </FormGroup>}
-                    </Box>
-
-                    <Typography gutterBottom>
-                        <Row style={tablesStyles.modalInfoWarn}>
-                            Nota(*): <span style={tablesStyles.modalInfo}>
-                            Após alterar qualquer dos campos, deve salvar as alterações para que sejam refletidas no sistema
-                        </span>
-                        </Row>
-                    </Typography>
-
-                </DialogContent>
-                <DialogActions>
-                    <Button autoFocus onClick={()=>setShowModal(false)}>
-                        Cancelar
-                    </Button>
-
-                    {saveStatus && <Button autoFocus onClick={updateActivitieHandler}>
-                        Gravar
-                    </Button>}
-
-                    {saveAllocated && <Button autoFocus onClick={allocateActivitieHandler}>
-                        Gravar
-                    </Button>}
-                </DialogActions>
-            </BootstrapDialog>
-        )
-
-    }*/
 
     const handleChangeDepartment = (event) => {
         setDepartment(event.target.value);

@@ -14,7 +14,11 @@ export enum ComponentActionTypes {
     SET_COMPONENT_LOADING_FAIL = "SET_COMPONENT_LOADING_FAIL",
     COMPONENT_GANTT_LOADING = "COMPONENT_GANTT_LOADING",
     COMPONENT_GANTT_LOADING_SUCCESS = "COMPONENT_GANTT_LOADING_SUCCESS",
-    COMPONENT_GANTT_LOADING_FAIL = "COMPONENT_GANTT_LOADING_FAIL"
+    COMPONENT_GANTT_LOADING_FAIL = "COMPONENT_GANTT_LOADING_FAIL",
+
+    CLOSE_COMPONENT = "CLOSE_COMPONENT",
+    CLOSE_COMPONENT_SUCCESS = "CLOSE_COMPONENT_SUCCESS",
+    CLOSE_COMPONENT_FAIL = "CLOSE_COMPONENT_FAIL"
 }
 
 interface IComponentLoading {
@@ -75,7 +79,22 @@ interface IGetGanttComponentFail {
 }
 
 
+interface ICloseComponent {
+    type: ComponentActionTypes.CLOSE_COMPONENT
+}
+
+interface ICloseComponentSuccess {
+    type: ComponentActionTypes.CLOSE_COMPONENT_SUCCESS,
+    payload: IComponent
+}
+
+interface ICloseComponentFail {
+    type: ComponentActionTypes.CLOSE_COMPONENT_FAIL,
+    payload: {error: IError}
+}
+
+
 export type ComponentAction =
     IComponentLoading | IComponentFail | IComponentSuccess | IAddComponentLoading| IAddComponentSuccess|
     IAddComponentFail| ISetComponentLoading| ISetComponentSuccess | ISetComponentFail | IGetGanttComponent|
-    IGetGanttComponentSuccess |IGetGanttComponentFail
+    IGetGanttComponentSuccess |IGetGanttComponentFail| ICloseComponent| ICloseComponentSuccess| ICloseComponentFail

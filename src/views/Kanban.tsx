@@ -12,6 +12,8 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+import Paper from "@mui/material/Paper";
+import {List} from "@mui/material";
 
 
 export  function Kanban() {
@@ -127,7 +129,7 @@ export  function Kanban() {
         data.map((item)=>{
             return aux.push({
                 id: ""+item?.id,
-                label: item.status?.name,
+                label: '',
                 title: item?.name,
                 draggable: true,
                 description: item?.description
@@ -261,15 +263,20 @@ export  function Kanban() {
                             </Box>
 
                             <TabPanel value="one">
-                                <Board
-                                    customCardLayout={true}
-                                    data={dados != null ? dados: data}
-                                    draggable={false}
-                                    editable={false}
-                                    style={{ background: 'rgba(255, 255, 200, .1)', color: 'green', fontFamily: 'sans-serif', fontSize: '12pt' }}
-                                >
-                                    <CustomCard props={data}/>
-                                </Board></TabPanel>
+                                <Paper style={{maxHeight: 550, overflow: 'auto'}}>
+                                    <List>
+                                        <Board
+                                            customCardLayout={true}
+                                            data={dados != null ? dados: data}
+                                            draggable={false}
+                                            editable={false}
+                                            style={{ background: 'rgba(255, 255, 200, .1)', color: 'green', fontFamily: 'sans-serif', fontSize: '12pt' }}
+                                        >
+                                            <CustomCard props={data}/>
+                                        </Board>
+                                    </List>
+                                </Paper>
+                            </TabPanel>
 
                             <TabPanel value="two">
                                     <ActivitiesTable/>

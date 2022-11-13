@@ -44,6 +44,13 @@ const componentReducer = (state: IComponentState = initialState, action: Compone
         case ComponentActionTypes.COMPONENT_GANTT_LOADING_FAIL:
             return {...state, isLoading: false }
 
+        case ComponentActionTypes.CLOSE_COMPONENT:
+            return {...state, isLoading: true}
+        case ComponentActionTypes.CLOSE_COMPONENT_SUCCESS:
+            return {...state, isLoading: false}
+        case ComponentActionTypes.CLOSE_COMPONENT_FAIL:
+            return {...state, isLoading: false }
+
         default:
             return state;
     }

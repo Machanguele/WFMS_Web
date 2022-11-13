@@ -78,7 +78,50 @@ export const activitySumAction = () =>
         }
     }
 
+export const createActivityAction = (name: string, description: string, componentId: number, expectedStarAt: string,
+                                     expectedEndAt: string
 
+) =>
+    async (dispatch: Dispatch<ActivityAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ActivityActionTypes.CREATE_ACTIVITY
+            });
+
+            await api.post<IActivity>(`activities`, {
+                name,
+                description,
+                componentId,
+                expectedEndAt,
+                expectedStarAt
+            })
+                .then(response => {
+
+                    console.log("dados de retorno")
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ActivityActionTypes.CREATE_ACTIVITY_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ActivityActionTypes.CREATE_ACTIVITY_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ActivityActionTypes.CREATE_ACTIVITY_FAIL,
+                payload: e
+            })
+        }
+    }
 
 export const uploadActivityAction = (data: FormData) =>
 

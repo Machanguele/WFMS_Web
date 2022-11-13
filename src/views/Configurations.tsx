@@ -49,7 +49,7 @@ export const Configurations = () => {
                         </TabPanel>
 
                         <TabPanel value="two">
-                             <UsersComponent />
+                             <Departament />
                         </TabPanel>
                         <TabPanel value="three">
                              <Departament />

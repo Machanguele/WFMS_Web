@@ -37,6 +37,39 @@ export const componentAction = (email: string, role: string) =>
     }
 
 
+export const closeComponentAction = (componentId: number) =>
+    async (dispatch: Dispatch<ComponentAction>) => {
+        let api = new Api();
+
+        try {
+            dispatch({
+                type: ComponentActionTypes.CLOSE_COMPONENT
+            });
+
+            await api.put<IComponent>("Components/finish", {componentId})
+                .then(response => {
+                    if (response.status === 200) {
+                        dispatch({
+                            type: ComponentActionTypes.CLOSE_COMPONENT_SUCCESS,
+                            payload: response.data
+                        });
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: ComponentActionTypes.CLOSE_COMPONENT_FAIL,
+                        payload: e
+                    })
+                });
+        }catch (e: any) {
+            dispatch({
+                type: ComponentActionTypes.CLOSE_COMPONENT_FAIL,
+                payload: e
+            })
+        }
+    }
+
+
 export const ganttomponentsAction = () =>
     async (dispatch: Dispatch<ComponentAction>) => {
         let api = new Api();

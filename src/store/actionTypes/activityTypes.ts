@@ -6,21 +6,30 @@ export enum ActivityActionTypes {
     ACTIVITY_LOADING = "ACTIVITY_LOADING",
     ACTIVITY_LOADING_SUCCESS = "ACTIVITY_LOADING_SUCCESS",
     ACTIVITY_LOADING_FAIL = "ACTIVITY_LOADING_FAIL",
+
     ACTIVITY_STATUS = "ACTIVITY_STATUS",
     ACTIVITY_STATUS_SUCCESS = "ACTIVITY_STATUS_SUCCESS",
     ACTIVITY_STATUS_FAIL = "ACTIVITY_STATUS_FAIL",
+
     ACTIVITY_ALLOCATE = "ACTIVITY_ALLOCATE",
     ACTIVITY_ALLOCATE_SUCCESS = "ACTIVITY_ALLOCATE_SUCCESS",
     ACTIVITY_ALLOCATE_FAIL = "ACTIVITY_ALLOCATE_FAIL",
+
     ACTIVITY_GANTT = "ACTIVITY_GANTT",
     ACTIVITY_GANTT_SUCCESS = "ACTIVITY_GANTT_SUCCESS",
     ACTIVITY_GANTT_FAIL = "ACTIVITY_GANTT_FAIL",
+
     UPLOAD_ACTIVITIES = "UPLOAD_ACTIVITIES",
     UPLOAD_ACTIVITIES_SUCCESS = "UPLOAD_ACTIVITIES_SUCCESS",
     UPLOAD_ACTIVITIES_FAIL = "UPLOAD_ACTIVITIES_FAIL",
+
     LOAD_SUM_ACTIVITIES = "LOAD_SUM_ACTIVITIES",
     LOAD_SUM_ACTIVITIES_SUCCESS = "LOAD_SUM_ACTIVITIES_SUCCESS",
-    LOAD_SUM_ACTIVITIES_FAIL = "LOAD_SUM_ACTIVITIES_FAIL"
+    LOAD_SUM_ACTIVITIES_FAIL = "LOAD_SUM_ACTIVITIES_FAIL",
+
+    CREATE_ACTIVITY = "CREATE_ACTIVITY",
+    CREATE_ACTIVITY_SUCCESS = "CREATE_ACTIVITY_SUCCESS",
+    CREATE_ACTIVITY_FAIL = "CREATE_ACTIVITY_FAIL"
 
 }
 
@@ -108,6 +117,20 @@ interface ISumActivitiesFail {
     payload: {error: IError}
 }
 
+interface ICreateActivity {
+    type: ActivityActionTypes.CREATE_ACTIVITY
+}
+
+interface ICreateActivitySuccess {
+    type: ActivityActionTypes.CREATE_ACTIVITY_SUCCESS,
+    payload: IActivity
+}
+
+interface ICreateActivityFail {
+    type: ActivityActionTypes.CREATE_ACTIVITY_FAIL,
+    payload: {error: IError}
+}
+
 
 
 export type ActivityAction =
@@ -115,4 +138,4 @@ export type ActivityAction =
     IActivitySatusSuccess |IActivitySatusFail | IActivityAllocateLoading | IActivityAllocateSuccess|
     IActivityAllocateFail| IActivitygGanttLoading | IActivityGanttSuccess| IActivityGanttFail|
     IUploadActivities| IUploadActivitiesSuccess| IUploadActivitiesFail| ISumActivity| ISumActivitiesSuccess|
-    ISumActivitiesFail
+    ISumActivitiesFail| ICreateActivity| ICreateActivitySuccess| ICreateActivityFail

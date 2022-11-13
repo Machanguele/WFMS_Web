@@ -45,7 +45,7 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import {Tooltip} from "@mui/material";
+import {List, Tooltip} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
@@ -58,6 +58,8 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
+import {CreateActivity} from "./CreateActivity";
+import {userAction} from "../store/actionCreators/user.actionCreator";
 
 
 
@@ -149,6 +151,8 @@ export default function ActivitiesTable() {
     const {componentId } = useTypeSelector(
         (state) => state.component
     );
+
+
 
 
 
@@ -298,8 +302,12 @@ export default function ActivitiesTable() {
     }
 
     const closeActivitiesHandler =()=>{
-        setIsAddingFile(false)
-        setIsUploadingFile(false)
+        dispatch(activityAction(componentId))
+        setTimeout(()=>{
+            setIsAddingFile(false)
+            setIsUploadingFile(false)
+        }, 1000)
+
     }
     const saveFile = (e) =>{
         setUploadedFile(e.target.files[0])
@@ -383,7 +391,10 @@ export default function ActivitiesTable() {
                                     <EditIcon
                                         fontSize={"small"}
                                         color={"warning"}
-                                        onClick={()=>setSaveStatus(true)}
+                                        onClick={()=>{
+                                            setSaveAllocated(false)
+                                            setSaveStatus(true)
+                                        }}
                                     />
                                 </IconButton>
                             </Row>
@@ -400,34 +411,10 @@ export default function ActivitiesTable() {
                                         <option value={"Concluídas"}>Concluídas</option>
                                     </Input>
                                 </FormGroup>}
-                            {/*<Dropdown
-                                nav
-                                isOpen={saveStatus}
-                                toggle={() => setSaveStatus(!saveStatus)}
-
-                            >
-                                <DropdownToggle caret nav>
-                                    <i className="nc-icon nc-bell-55" />
-                                    <p>
-                                        <span className="d-lg-none d-md-block">Some Actions</span>
-                                    </p>
-                                </DropdownToggle>
-                                <DropdownMenu right>
-                                    <DropdownItem tag="a">Action</DropdownItem>
-                                    <DropdownItem tag="a">Another Action</DropdownItem>
-                                    <DropdownItem tag="a">Something else here</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>*/}
                         </Box>
                     <Box>
                         <Row style={tablesStyles.modalTitle}>
                             Descrição: <span style={tablesStyles.modalInfo}>
-                            {/*<TextField
-                                variant="standard"
-                                disabled
-                                id="outlined-disabled"
-                                value={selectedActivity?.description}
-                            />*/}
                             {selectedActivity?.description}
                             </span>
                         </Row>
@@ -478,7 +465,10 @@ export default function ActivitiesTable() {
                                 <EditIcon
                                     fontSize={"small"}
                                     color={"warning"}
-                                    onClick={()=>setSaveAllocated(true)}
+                                    onClick={()=>{
+                                        setSaveStatus(false)
+                                        setSaveAllocated(true)
+                                    }}
                                 />
                             </IconButton>
                         </Row>
@@ -491,10 +481,13 @@ export default function ActivitiesTable() {
                                        onChange={handleChangeUser}
                                 >
                                     <option value={"admin@feuem.co.mz"}>Admin FEUEM</option>
-                                    <option value={"josemachanguele@gmail.com"}>Jose Machanguele</option>
+                                    <option value={"ot@feuem.ac.mz"}>Jose Machanguele</option>
+                                    <option value={"ot@feuem.ac.mz"}>Jacinta de Sousa</option>
                                     <option value={"admin@feuem.co.mz"}>Jacinta de Sousa</option>
                                     <option value={"admin@feuem.co.mz"}>Julio Carlos</option>
                                     <option value={"admin@feuem.co.mz"}>Ana Clara</option>
+                                    <option value={"admin@feuem.co.mz"}>Felizarda Netos</option>
+                                    <option value={"admin@feuem.co.mz"}>Jacira Castro</option>
                                 </Input>
                             </FormGroup>}
                     </Box>
@@ -561,87 +554,84 @@ export default function ActivitiesTable() {
         )
     }
 
-    const AddActivity =()=>{
-        return(
-            <Box>
-
-            </Box>
-        )
-    }
 
 
     const FindActivities=({data}: IFindActivitiesPros)=>{
         return(
-            <TableContainer component={Paper} sx={{marginLeft: '-2%'}}>
-                <Table sx={{ minWidth: 650, marginLeft: 0, width: '100%' }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>#</StyledTableCell>
-                            <StyledTableCell sx={{width: '8%'}}>Actividade</StyledTableCell>
-                            <StyledTableCell align="left" sx={{width: '12%'}}>Inicio Planeado</StyledTableCell>
-{/*
+            <Paper style={{maxHeight: 400, overflow: 'auto', width: '100%'}}>
+                <List>
+                    <TableContainer component={Paper} sx={{marginLeft: '0%'}}>
+                        <Table sx={{ minWidth: 650, marginLeft: 0, width: '100%' }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell>#</StyledTableCell>
+                                    <StyledTableCell sx={{width: '8%'}}>Actividade</StyledTableCell>
+                                    <StyledTableCell align="left" sx={{width: '12%'}}>Inicio Planeado</StyledTableCell>
+                                    {/*
                             <StyledTableCell align="left">Inicio</StyledTableCell>
 */}
-                            <StyledTableCell align="left">Fim Planeado</StyledTableCell>
-{/*
+                                    <StyledTableCell align="left">Fim Planeado</StyledTableCell>
+                                    {/*
                             <StyledTableCell align="left">Fim</StyledTableCell>
 */}
-                            <StyledTableCell align="left">Estado</StyledTableCell>
-                            <StyledTableCell align="left">Alocado</StyledTableCell>
-                            <StyledTableCell align="left">Ver</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((row) => (
-                            <StyledTableRow
-                                key={row.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <StyledTableCell component="th" scope="row">
-                                    {row.id}
-                                </StyledTableCell>
-                                <StyledTableCell component="th" scope="row" sx={{width: '8%'}}>
-                                    {row.activity}
-                                </StyledTableCell>
-                                <StyledTableCell align="left" sx={{width: '12%'}}>{new Date(row.expectedStartDay).toLocaleDateString("pt-PT")}</StyledTableCell>
-{/*
+                                    <StyledTableCell align="left">Estado</StyledTableCell>
+                                    <StyledTableCell align="left">Alocado</StyledTableCell>
+                                    <StyledTableCell align="left">Ver</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {data.map((row) => (
+                                    <StyledTableRow
+                                        key={row.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <StyledTableCell component="th" scope="row">
+                                            {row.id}
+                                        </StyledTableCell>
+                                        <StyledTableCell component="th" scope="row" sx={{width: '8%'}}>
+                                            {row.activity}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="left" sx={{width: '12%'}}>{new Date(row.expectedStartDay).toLocaleDateString("pt-PT")}</StyledTableCell>
+                                        {/*
                                 <StyledTableCell align="left">{row.stardDay != "-"? new Date(row.stardDay).toLocaleDateString("pt-PT"): row.stardDay}</StyledTableCell>
 */}
-                                <StyledTableCell align="left">{new Date(row.expectedEndDay).toLocaleDateString("pt-PT")}</StyledTableCell>
-{/*
+                                        <StyledTableCell align="left">{new Date(row.expectedEndDay).toLocaleDateString("pt-PT")}</StyledTableCell>
+                                        {/*
                                 <StyledTableCell align="left">{row.endDay != "-"? new Date(row.endDay).toLocaleDateString("pt-PT"): row.endDay}</StyledTableCell>
 */}
-                                <StyledTableCell align="left">
-                                    <Row>
-                                        <span style={{marginTop: '3.5%'}}>{row.status}</span>
-                                        <IconButton color="success">
+                                        <StyledTableCell align="left">
+                                            <Row>
+                                                <span style={{marginTop: '3.5%'}}>{row.status}</span>
+                                                {/* <IconButton color="success">
                                             <EditIcon fontSize={"small"}/>
-                                        </IconButton>
-                                    </Row>
-                                </StyledTableCell>
+                                        </IconButton>*/}
+                                            </Row>
+                                        </StyledTableCell>
 
-                                <StyledTableCell align="left">
-                                    <Row>
-                                        <span style={{marginTop: '3.5%'}}>{row.allocatedTo}</span>
-                                        <IconButton color="success">
+                                        <StyledTableCell align="left">
+                                            <Row>
+                                                <span style={{marginTop: '3.5%'}}>{row.allocatedTo}</span>
+                                                {/*<IconButton color="success">
                                             <EditIcon fontSize={"small"}/>
-                                        </IconButton>
-                                    </Row>
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                    <IconButton aria-label="fingerprint" color="success">
-                                        <BuildIcon
-                                            color={"warning"}
-                                            onClick={()=>handleSelectedActivity(row)}
-                                        />
-                                    </IconButton>
+                                        </IconButton>*/}
+                                            </Row>
+                                        </StyledTableCell>
+                                        <StyledTableCell align="left">
+                                            <IconButton aria-label="fingerprint" color="success">
+                                                <BuildIcon
+                                                    color={"warning"}
+                                                    onClick={()=>handleSelectedActivity(row)}
+                                                />
+                                            </IconButton>
 
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </List>
+            </Paper>
 
         )
     }
@@ -724,6 +714,7 @@ export default function ActivitiesTable() {
                                     </Box>
                                     {isUploadingFile && <UploadActivities/>}
                                     {(!isUploadingFile && !isAddingFile) && <FindActivities data={dataTodo}/>}
+                                    {isAddingFile && <CreateActivity/>}
 
                                 </Box>
 
