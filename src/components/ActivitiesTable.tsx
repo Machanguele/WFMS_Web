@@ -139,6 +139,7 @@ export default function ActivitiesTable() {
     const [selectedEmail, setSelectedEmail] = React.useState('');
     const [uploadedFile, setUploadedFile] = React.useState<File>();
 
+
     const handleChangeStatus = (event: SelectChangeEvent) => {
         setStatus(event.target.value);
         console.log("Valor selecionado", event.target.value)
@@ -321,7 +322,12 @@ export default function ActivitiesTable() {
             data.append("componentId", `${componentId}`)
             data.append("file", uploadedFile)
             console.log("O formmmmmmmmmmmmmmmmm File", data)
+            setIsUploadingFile(false)
             dispatch(uploadActivityAction(data))
+            setTimeout(()=>{
+                setValue("one")
+                dispatch(activityAction(componentId))
+            }, 500)
         }
     }
 
@@ -502,15 +508,15 @@ export default function ActivitiesTable() {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={()=>setShowModal(false)}>
+                    <Button autoFocus onClick={()=>setShowModal(false)} color={"warning"}>
                         Cancelar
                     </Button>
 
-                    {saveStatus && <Button autoFocus onClick={updateActivitieHandler}>
+                    {saveStatus && <Button autoFocus onClick={updateActivitieHandler} color={"success"}>
                         Gravar
                     </Button>}
 
-                    {saveAllocated && <Button autoFocus onClick={allocateActivitieHandler}>
+                    {saveAllocated && <Button autoFocus onClick={allocateActivitieHandler} color={"success"}>
                         Gravar
                     </Button>}
                 </DialogActions>
