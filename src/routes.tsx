@@ -4,12 +4,12 @@ import Dashboard from "../src/views/Dashboard";
 import Notifications from "../src/views/Notifications";
 import Icons from "../src/views/Icons";
 import Typography from "../src/views/Typography";
-import TableList from "../src/views/Tables";
-import UserPage from "../src/views/User";
 import {Kanban} from "./views/Kanban";
 import Departament from "./views/Departament";
 import Component from "./views/Components";
 import Estatistica from "./views/Estatisticas";
+import UsersComponent from "./views/Users";
+import {Configurations} from "./views/Configurations";
 
 const routes = [
 	{
@@ -84,7 +84,7 @@ const routes = [
 		path: "/Configuracoes",
 		name: "Configurações",
 		icon: "nc-icon nc-settings-gear-65",
-		component: Departament,
+		component: Configurations,
 		layout: "/admin",
 		invisible: false,
 	},
@@ -102,6 +102,14 @@ const routes = [
 		name: "Meu Perfil",
 		icon: "nc-icon nc-single-02",
 		component: Departament,
+		layout: "/admin",
+		invisible: false,
+	},
+	{
+		path: "/users",
+		name: "Utilizadores",
+		icon: "nc-icon nc-single-02",
+		component: UsersComponent,
 		layout: "/admin",
 		invisible: false,
 	},

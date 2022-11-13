@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-	Button,
 	Card,
 	CardBody,
 	FormGroup,
@@ -19,6 +18,73 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { loginAction } from "../store/actionCreators/login.actionCreator";
 import { useTypeSelector } from "../hooks/useTypeSelector";
+import SchemaIcon from "@mui/icons-material/Schema";
+import logo from "../assets/img/logo.png";
+import Box from "@mui/material/Box";
+import {Button} from "@mui/material";
+
+
+const cardStyles = {
+	detailsButton: {
+		borderRadius: 5,
+		marginLeft: '45%',
+	},
+	detailTitle:{
+		fontSize: 13,
+		fontWeight: 'bold',
+		color: '#7F807F',
+		marginRight: '3%',
+		display: 'flex',
+		justifyContent: 'flexStart'
+	},
+	detailValue:{
+		fontSize: 13,
+		color: '#6C716C',
+		display: 'flex',
+		justifyContent: 'flexStart'
+
+	},
+	cardStyle:{
+		alignItems: 'left',
+		marginLeft: 0,
+		paddingLeft: 0,
+		display: 'flex',
+		alignContent: 'left',
+		justifyContent: 'flexStart',
+		backgroundColor: "rgba(255, 255, 200, .8)",
+		borderLeftWidth: 8,
+		// borderLeft: '5px solid #F39C12',
+	},
+	cardDetails:{
+		display: 'flex',
+		justifyContent: 'flexStart'
+	},
+	inputStyles:{
+		/*
+              backgroundColor: '#FEF9E7',
+        */
+		borderColor: '#167415',
+		borderWidth: 1,
+		fontSize: '12pt',
+		fontFamily: 'sans-serif'
+	},
+	button:{
+		color: '#FFFFFF',
+		backgroundColor: '#167415',
+		fontSize: '10pt',
+		fontFamily: 'sans-serif',
+		fontWeight: 'none',
+		
+	},
+	recover:{
+		color: '#45B39D',
+		fontSize: '11pt',
+		fontFamily: 'sans-serif',
+		marginTop: '1.7%'
+	}
+}
+
+
 
 const Login = () => {
 	const [email, setEmail] = useState("");
@@ -50,15 +116,26 @@ const Login = () => {
 	}, [errorMessage]);
 
 	return (
-		<>
+		<Box sx={{marginTop: '10%', marginBottom: '10%'}}>
 			<div className="content">
 				<Row>
 					<Col lg="6" md="6" sm="6" className="text-center  ml-auto mr-auto ">
 						<Card className="h3 shadow border-0 ">
 							<CardHeader>
+								<Box sx={{display: 'flex', justifyContent: 'center', marginTop: '2%'}}>
+									<div className="logo">
+										<a
+											href="http://www.engenharia.uem.mz/"
+											className="simple-text logo-normal"
+											target="_blank" rel="noreferrer"
+										>
+											<img src={logo} color={'white'} width={'50%'} className={"logoName"}/>
+										</a>
+									</div>
+								</Box>{/*
 								<div className="text-center  text-success mb-3 mt-5">
-									<small> Inicie a sessão na sua conta </small>
-								</div>
+									<small> Iniciar a sessão</small>
+								</div>*/}
 							</CardHeader>
 							<CardBody className="px-lg-5 py-lg-5">
 								<Form role="form">
@@ -95,18 +172,17 @@ const Login = () => {
 										</InputGroup>
 									</FormGroup>
 									<div>
-										<Button
-											block
-											className="my-2  mb-3 mt-5"
-											size="lg"
-											color="success"
-											type="button"
-											onClick={loginHandler}
-										>
-											Iniciar
-										</Button>
+										<Box>
+											<button
+												color="success"
+												onClick={loginHandler}
+												style={cardStyles.button}
+											>
+												Iniciar a sessão
+											</button>
+										</Box>
 										<a className="text-success" href="/auth/recover">
-											<small>Recovery Password</small>
+											<small style={cardStyles.recover}>Não consegue iniciar a sessão?</small>
 										</a>
 									</div>
 								</Form>
@@ -116,7 +192,7 @@ const Login = () => {
 				</Row>
 			</div>
 			{isLoading && <Spinner type="border" />}
-		</>
+		</Box>
 	);
 };
 

@@ -2,26 +2,17 @@ import {ILogin} from "../../models/login";
 import {LoginAction, LoginActionTypes} from "../actionTypes/login.actionTypes";
 
 export interface ILoginState {
-    login: ILogin,
+    loginData: ILogin,
     isLoading: boolean,
-    errorMessage: string
+    errorMessage: string,
+    userLogged: string
 }
 
 const initialState: ILoginState = {
     isLoading: false,
     errorMessage: "",
-    login: {
-        fullName: "",
-        username: "",
-        email:"",
-        token:"",
-        refreshToken: "",
-        role: {
-            description: "",
-            name: "",
-            permissions: []
-        }
-    },
+    userLogged: '',
+    loginData: {} as ILogin
 }
 
 const loginReducer = (state: ILoginState = initialState, action: LoginAction) => {
@@ -29,13 +20,13 @@ const loginReducer = (state: ILoginState = initialState, action: LoginAction) =>
         case LoginActionTypes.LOGIN_LOADING:
             return {...state, isLoading: true}
         case LoginActionTypes.LOGIN_SUCCESS:
-            return {...state, isLoading: false, login: action.payload}
+            return {...state, isLoading: false, login: action.payload, userLogged: action.payload?.fullName}
         case LoginActionTypes.LOGIN_FAIL:
             return {...state, isLoading: false, errorMessage: action.payload}
         case LoginActionTypes.LOGOUT_LOADING:
             return {...state, isLoading: true}
         case LoginActionTypes.LOGOUT_SUCCESS:
-            return {...state, isLoading: false, login: {}}
+            return {...state, isLoading: false, login: {}, userLogged: ''}
         case LoginActionTypes.LOGOUT_FAIL:
             return {...state, isLoading: false, errorMessage: action.payload}
         default:

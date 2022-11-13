@@ -6,5 +6,5 @@ export interface ILogin {
     email: string,
     token: string,
     refreshToken: string,
-    role: IRole
+    role: string
 }
