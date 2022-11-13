@@ -56,6 +56,7 @@ import Tab from "@mui/material/Tab";
 import {TabPanel} from "@mui/lab";
 import {IComponent} from "../models/component";
 import SettingsIcon from '@mui/icons-material/Settings';
+import {IUser} from "../models/user";
 // core components
 
 
@@ -130,17 +131,28 @@ function Component() {
     const {components, isLoading, errorMessage, componentId, gantComponents } = useTypeSelector(
         (state) => state.component
     );
-    const [value, setValue] = React.useState('one');
+
+    const [user, setUser] = React.useState<IUser>({} as IUser);
+    useEffect(()=>{
+        let aux = localStorage.getItem('user')
+        if(aux != null)
+            setUser(JSON.parse(aux));
+
+
+    }, [])
+
+    const [value, setValue] = React.useState(user.role == 'Gestor de actividades' || user.role === 'Director'?'one': 'two');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
 
+
     const dispatch = useDispatch();
     const history = useHistory();
 
     const componentHandler = () => {
-        dispatch(componentAction());
+        dispatch(componentAction(user.email, user.role));
     };
 
     const handleCreateComponent = ()=>{
@@ -162,6 +174,8 @@ function Component() {
         history.push(`/admin/actividades/${component}`)
 
     }
+
+
 
     const ComponentBoard =()=>{
         let auxiliarList: IComponent[];
@@ -352,8 +366,12 @@ function Component() {
                                 aria-label="secondary tabs example"
                                 centered={true}
                             >
-                                <Tab value="one" label="Sem actividades" style={{color: '#167415',
-                                    textTransform: 'none'}} />
+                                {(user.role == 'Gestor de actividades' || user.role === 'Director')
+                                    &&
+                                    <Tab value="one" label="Sem actividades" style={{
+                                    color: '#167415',
+                                    textTransform: 'none'
+                                }}/>}
 
                                 <Tab
                                     value="two"
@@ -365,22 +383,24 @@ function Component() {
                             </Tabs>
                         </Box>
 
-                        <TabPanel value={"one"}>
+                        {(user.role == 'Gestor de actividades' || user.role === 'Director') &&
+                            <TabPanel value={"one"}>
                             <Box>
                                 <Box>
-                                    {!addComponent && <Button
+                                    {(!addComponent && (user.role == 'Gestor de actividades' || user.role === 'Director')) &&
+                                        <Button
 
-                                        color="success" link onClick={() => setAddComponent(true)}
-                                        style={{borderRadius: 7}}
-                                    >
-                                        <span style={{color: '#FFFFFF'}}>Adicionar componente</span>
-                                        <AddCircleIcon fontSize={'small'}/>
-                                    </Button>}
+                                            color="success" link onClick={() => setAddComponent(true)}
+                                            style={{borderRadius: 7}}
+                                        >
+                                            <span style={{color: '#FFFFFF'}}>Adicionar componente</span>
+                                            <AddCircleIcon fontSize={'small'}/>
+                                        </Button>}
                                 </Box>
-                                <ComponentBoard />
+                                <ComponentBoard/>
                             </Box>
 
-                        </TabPanel>
+                        </TabPanel>}
                         <TabPanel value="two">
                             <ComponentBoard />
 

@@ -5,7 +5,7 @@ import activityReducer from "./activity.reducer";
 import UserReducer from "./user.reducer";
 
 const reducers = combineReducers({
-   login: loginReducer,
+   loginInfo: loginReducer,
    component: componentReducer,
    activity: activityReducer,
    user: UserReducer

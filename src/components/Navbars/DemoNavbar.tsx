@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {useEffect} from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Collapse,
@@ -24,6 +24,7 @@ import {useTypeSelector} from "../../hooks/useTypeSelector";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router";
 import {logoutAction} from "../../store/actionCreators/login.actionCreator";
+import {IUser} from "../../models/user";
 
 interface IHeaderProps {
   props: RouteComponentProps<ExtractRouteParams<string,string>>,
@@ -89,8 +90,15 @@ function Header({props} : IHeaderProps) {
   const dispatch = useDispatch();
   const history = useHistory();
   const {login, userLogged, isLoading, userArchived, userCreated} = useTypeSelector(
-      (state) => state.login
+      (state) => state.loginInfo
   );
+  const [user, setUser] = React.useState<IUser>({} as IUser);
+  useEffect(()=>{
+    let aux = localStorage.getItem('user')
+    if(aux != null)
+      setUser(JSON.parse(aux));
+
+  }, [])
 
   const logoutHandler =()=>{
     console.log("Fazendo o Logout")
@@ -155,6 +163,9 @@ function Header({props} : IHeaderProps) {
                 </p>
               </Link>
             </NavItem>*/}
+            <NavItem style={{fontSize: '10pt', color: 'green', fontFamily: 'sans-serif', marginTop: '5%'}}>
+              <p>{user.email}</p>
+            </NavItem>
             <Dropdown
               nav
               isOpen={dropdownOpen}
@@ -162,7 +173,7 @@ function Header({props} : IHeaderProps) {
 
             >
               <DropdownToggle caret nav>
-                <i className="nc-icon nc-single-02" />
+                {/*<i className="nc-icon nc-single-02" />*/}
                 <p>
                   <span className="d-lg-none d-md-block">Some Actions</span>
                 </p>
@@ -172,9 +183,7 @@ function Header({props} : IHeaderProps) {
                 <DropdownItem tag="a">Meu Perfil</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <NavItem>
-              <p>{userLogged}</p>
-            </NavItem>
+
             {/*<NavItem>
               <Link to="#pablo" className="nav-link btn-rotate">
                 <i className="nc-icon nc-settings-gear-65" />

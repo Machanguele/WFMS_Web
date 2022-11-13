@@ -24,7 +24,7 @@ const Login = () => {
 	const [email, setEmail] = useState("");
 	const [loginData, setLoginData] = useState<ILogin>();
 	const { login, isLoading, errorMessage } = useTypeSelector(
-		(state) => state.login
+		(state) => state.loginInfo
 	);
 
 	const dispatch = useDispatch();

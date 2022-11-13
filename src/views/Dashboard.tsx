@@ -113,9 +113,9 @@ function Dashboard() {
         dispatch(activitySumAction())
     }, [])
 
-    const componentHandler = () => {
+    /*const componentHandler = () => {
         dispatch(componentAction());
-    };
+    };*/
 
     const sumActivities: SummaryActivities[]=[
         {name: "Por fazer", quantity: 50, color: '#F39C12'},

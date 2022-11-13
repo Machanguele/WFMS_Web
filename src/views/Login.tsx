@@ -74,7 +74,7 @@ const cardStyles = {
 		fontSize: '10pt',
 		fontFamily: 'sans-serif',
 		fontWeight: 'none',
-		
+
 	},
 	recover:{
 		color: '#45B39D',
@@ -91,7 +91,7 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [loginData, setLoginData] = useState<ILogin>();
 	const { login, isLoading, errorMessage } = useTypeSelector(
-		(state) => state.login
+		(state) => state.loginInfo
 	);
 
 	const dispatch = useDispatch();
@@ -116,7 +116,7 @@ const Login = () => {
 	}, [errorMessage]);
 
 	return (
-		<Box sx={{marginTop: '10%', marginBottom: '10%'}}>
+		<Box sx={{marginTop: '10%', marginBottom: '20%'}}>
 			<div className="content">
 				<Row>
 					<Col lg="6" md="6" sm="6" className="text-center  ml-auto mr-auto ">
@@ -173,13 +173,13 @@ const Login = () => {
 									</FormGroup>
 									<div>
 										<Box>
-											<button
+											<Button
 												color="success"
-												onClick={loginHandler}
+												onClick={()=>loginHandler()}
 												style={cardStyles.button}
 											>
 												Iniciar a sessão
-											</button>
+											</Button>
 										</Box>
 										<a className="text-success" href="/auth/recover">
 											<small style={cardStyles.recover}>Não consegue iniciar a sessão?</small>

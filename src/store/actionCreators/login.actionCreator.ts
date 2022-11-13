@@ -15,11 +15,12 @@ export const loginAction = (email: string, password: string) =>
         await api.post<ILogin>("/auth", {email, password})
             .then(r => {
 
-                console.log("dados de retorno")
+                console.log("dados de retorno loginnnnnnnnnnnnnnnnnnnnnnnnnn")
                 console.log(r.data)
 
                 if (r.status === 200) {
                     localStorage.setItem('user', JSON.stringify(r.data));
+                    localStorage.setItem('token', JSON.stringify(r.data.token));
                     console.log("teste");
                     console.log(localStorage.getItem('user'));
                     dispatch({

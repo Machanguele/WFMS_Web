@@ -1,8 +1,22 @@
 import axios from "axios";
+import {IUser} from "../models/user";
+
+export const token = ()=>{
+    let aux = localStorage.getItem('token')
+
+    console.log("Tokkkkkkkkkkkkkkkkkkkkken ", aux)
+    return aux;
+
+}
 
 export const api = axios.create({
-    baseURL: 'https://localhost:5001/api/'
+    baseURL: 'https://localhost:5001/api/',
+    headers: { Authorization: `Bearer' ${token()}`,
+
+    }
 })
+
+
 
 export class Api {
 
